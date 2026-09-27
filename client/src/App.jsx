@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import coachImg from './assets/coach_ranu_patel.png';
 import dawnImg from './assets/brahma_muhurat_dawn.jpg';
+import logoImg from './assets/logo_brahmamuhurta.jpg';
 
 const COUNTRY_CONFIG = {
   India: {
@@ -146,6 +147,19 @@ export default function App() {
     <div className="landing-app">
       {/* Background Decorative Spotlight Glow */}
       <div className="spotlight-glow" aria-hidden="true"></div>
+
+      {/* Top Header */}
+      <header className="site-header">
+        <div className="container header-inner">
+          <a href="#hero" className="navbar-brand">
+            <img src={logoImg} alt="Brahmamuhurta Logo" className="brand-logo-img" />
+          </a>
+
+          <button onClick={() => scrollToSection('register')} className="btn btn-sm btn-hero-highlight">
+            Reserve My Spot →
+          </button>
+        </div>
+      </header>
 
 
       {/* =========================================================================
@@ -1020,8 +1034,8 @@ export default function App() {
           <div className="footer-top">
             <div className="footer-brand">
               <div className="navbar-brand">
-                <span className="brand-symbol">ॐ</span>
-                <span className="brand-name">NARAYAN PRESENCE</span>
+                <img src={logoImg} alt="Brahmamuhurta Logo" className="brand-logo-img" />
+                <span className="brand-name">BRAHMAMUHURTA</span>
               </div>
               <p className="footer-motto">
                 Wake Before The World. Rewire Your Mind. Become The Person Your Life Is Waiting For.
@@ -1062,9 +1076,14 @@ export default function App() {
                 Terms &amp; Conditions
               </button>
               <span className="legal-sep">|</span>
-              <button type="button" onClick={() => setIsAdminView(true)} style={{ color: '#F59E0B', fontWeight: 'bold' }}>
-                ⚙️ Admin Login
-              </button>
+              <a
+                href="/admin"
+                style={{ color: '#F59E0B', fontWeight: 'bold', textDecoration: 'none' }}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ⚙️ Admin Portal
+              </a>
             </div>
           </div>
 

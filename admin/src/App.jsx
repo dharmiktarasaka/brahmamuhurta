@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logoImg from './assets/logo_brahmamuhurta.jpg';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
 
@@ -25,6 +26,15 @@ export default function AdminPanel({ onBackToLanding }) {
     notes: ''
   });
 
+  // Authentication State
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return sessionStorage.getItem('narayan_admin_auth') === 'true';
+  });
+  const [loginId, setLoginId] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
   // Fetch from persistent backend DB
   const fetchRegistrations = async () => {
     try {
@@ -44,8 +54,32 @@ export default function AdminPanel({ onBackToLanding }) {
   };
 
   useEffect(() => {
-    fetchRegistrations();
-  }, []);
+    if (isAuthenticated) {
+      fetchRegistrations();
+    }
+  }, [isAuthenticated]);
+
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    const cleanId = loginId.trim().toLowerCase();
+    const cleanPass = loginPassword.trim();
+
+    if (cleanId === 'narayan.brahmamuhurta.com' && cleanPass === 'narayan$2028') {
+      setIsAuthenticated(true);
+      sessionStorage.setItem('narayan_admin_auth', 'true');
+      setLoginError('');
+    } else {
+      setLoginError('Invalid Admin ID or Password. Please try again.');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    sessionStorage.removeItem('narayan_admin_auth');
+    setLoginId('');
+    setLoginPassword('');
+    setLoginError('');
+  };
 
   // Update Status in DB
   const handleStatusChange = async (id, newStatus) => {
@@ -162,15 +196,103 @@ export default function AdminPanel({ onBackToLanding }) {
   const otherCount = registrations.filter(r => !['India', 'UAE', 'USA'].includes(r.country)).length;
   const liveConfirmedCount = registrations.filter(r => r.liveCommit?.includes('live')).length;
 
+  // If Not Authenticated, Show Secure Lock Screen
+  if (!isAuthenticated) {
+    return (
+      <div className="admin-lock-screen">
+        <div className="spotlight-glow"></div>
+        <div className="admin-login-card">
+          <div className="admin-login-header">
+            <img src={logoImg} alt="Brahmamuhurta Logo" className="admin-login-logo-img" />
+            <h2 className="admin-login-title">Brahmamuhurta</h2>
+            <p className="admin-login-subtitle">Private Coach &amp; Admin Portal</p>
+          </div>
+
+          <form onSubmit={handleLoginSubmit} className="admin-login-form">
+            {loginError && (
+              <div className="admin-login-error">
+                <span>⚠️ {loginError}</span>
+              </div>
+            )}
+
+            <div className="form-group">
+              <label className="form-label" htmlFor="adminId">Admin ID / Access Key</label>
+              <input
+                id="adminId"
+                type="text"
+                className="form-input"
+                required
+                autoFocus
+                placeholder="narayan.brahmamuhurta.com"
+                value={loginId}
+                onChange={(e) => {
+                  setLoginId(e.target.value);
+                  setLoginError('');
+                }}
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label" htmlFor="adminPass">Private Password</label>
+              <div className="password-input-wrap" style={{ position: 'relative' }}>
+                <input
+                  id="adminPass"
+                  type={showPassword ? 'text' : 'password'}
+                  className="form-input"
+                  required
+                  placeholder="Enter private password"
+                  value={loginPassword}
+                  onChange={(e) => {
+                    setLoginPassword(e.target.value);
+                    setLoginError('');
+                  }}
+                  style={{ paddingRight: '45px' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '1rem',
+                    color: '#64748B'
+                  }}
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? '👁️' : '🔒'}
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" className="btn btn-primary btn-block btn-lg" style={{ marginTop: '8px' }}>
+              Unlock Admin Portal →
+            </button>
+          </form>
+
+          <div className="admin-login-footer">
+            <small className="text-muted">
+              🔒 Restricted to authorized coaches and administrators.
+            </small>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="admin-dashboard-layout">
       {/* Top Admin Header */}
       <header className="admin-header">
         <div className="container admin-header-inner">
           <div className="admin-brand">
-            <span className="brand-symbol">ॐ</span>
+            <img src={logoImg} alt="Brahmamuhurta Logo" className="brand-logo-img" />
             <div>
-              <h1 className="admin-portal-title">Narayan Presence — Admin Portal</h1>
+              <h1 className="admin-portal-title">Brahmamuhurta — Admin Portal</h1>
               <p className="admin-portal-subtitle">Founding Batch · Registrations &amp; Live Cohort Manager</p>
             </div>
           </div>
@@ -182,6 +304,14 @@ export default function AdminPanel({ onBackToLanding }) {
             <a href={`${API_BASE}/api/admin/export`} className="btn btn-sm btn-outline-admin" download>
               📥 Export CSV
             </a>
+            <button
+              onClick={handleLogout}
+              className="btn btn-sm btn-outline-admin"
+              style={{ color: '#DC2626', borderColor: 'rgba(220, 38, 38, 0.3)' }}
+              title="Log out of Admin Dashboard"
+            >
+              🔒 Logout
+            </button>
             <button
               onClick={() => {
                 if (onBackToLanding) onBackToLanding();
