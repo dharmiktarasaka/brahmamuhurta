@@ -188,7 +188,7 @@ export default function App() {
             <div className="hero-coach-line">
               <span className="coach-highlight-name">Ranu Patel</span>
               <span className="coach-sep">—</span>
-              <span className="coach-role">Wellness Coach, Co-Founder of Narayan Presence</span>
+              <span className="coach-role">Co-Founder | Life Transformation Coach &amp; Consultant</span>
             </div>
 
             {/* Subheadline description */}
@@ -234,7 +234,7 @@ export default function App() {
               <div className="coach-halo-glow"></div>
               <img 
                 src={coachImg} 
-                alt="Ranu Patel - Wellness Coach & Co-Founder" 
+                alt="Ranu Patel - Co-Founder | Life Transformation Coach & Consultant" 
                 className="coach-spotlight-img"
               />
               
@@ -489,7 +489,7 @@ export default function App() {
             <div className="coach-bio-column">
               <span className="badge-pill">Meet Your Coach</span>
               <h2 className="coach-name-heading">Ranu Patel</h2>
-              <p className="coach-title-subtitle">Wellness Coach &amp; Co-Founder, Narayan Presence</p>
+              <p className="coach-title-subtitle">Co-Founder | Life Transformation Coach &amp; Consultant</p>
               
               <div className="coach-story-card">
                 <p className="coach-quote-para">
