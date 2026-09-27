@@ -6,33 +6,60 @@ import logoImg from './assets/logo_brahmamuhurta.jpg';
 const COUNTRY_CONFIG = {
   India: {
     code: '+91',
-    price: 'FREE',
-    fullPrice: '100% Free Live Access',
-    placeholder: 'Enter your 10-digit number',
-    flag: '🇮🇳'
+    name: 'India',
+    flag: '🇮🇳',
+    placeholder: 'Enter 10-digit WhatsApp number'
+  },
+  'United States': {
+    code: '+1',
+    name: 'United States',
+    flag: '🇺🇸',
+    placeholder: 'e.g. (555) 000-0000'
   },
   UAE: {
     code: '+971',
-    price: 'FREE',
-    fullPrice: '100% Free Live Access',
-    placeholder: 'e.g. 50 123 4567',
-    flag: '🇦🇪'
+    name: 'UAE',
+    flag: '🇦🇪',
+    placeholder: 'e.g. 50 123 4567'
   },
-  USA: {
+  UK: {
+    code: '+44',
+    name: 'UK',
+    flag: '🇬🇧',
+    placeholder: 'e.g. 7911 123456'
+  },
+  Canada: {
     code: '+1',
-    price: 'FREE',
-    fullPrice: '100% Free Live Access',
-    placeholder: 'e.g. (555) 000-0000',
-    flag: '🇺🇸'
+    name: 'Canada',
+    flag: '🇨🇦',
+    placeholder: 'e.g. (555) 000-0000'
+  },
+  Australia: {
+    code: '+61',
+    name: 'Australia',
+    flag: '🇦🇺',
+    placeholder: 'e.g. 412 345 678'
   },
   Other: {
     code: '+',
-    price: 'FREE',
-    fullPrice: '100% Free Live Access',
-    placeholder: 'Include your country code',
-    flag: '🌍'
+    name: 'Other',
+    flag: '🌍',
+    placeholder: 'Include country code with number'
   }
 };
+
+const ROLE_OPTIONS = [
+  'Working Professional',
+  'Entrepreneur / Business Owner',
+  'Founder-CEO',
+  'Student / Seeker',
+  'Parent',
+  'Homemaker',
+  'Service Provider',
+  'Coach-Consultant',
+  'Retired-Older Adult',
+  'Other'
+];
 
 export default function App() {
   const [selectedCountry, setSelectedCountry] = useState('India');
@@ -46,9 +73,9 @@ export default function App() {
     fullName: '',
     email: '',
     whatsapp: '',
-    stuckArea: '',
-    liveCommit: "Yes, I'll be there live",
-    goDeeper: "Yes, if it's right for me"
+    userRole: 'Working Professional',
+    interestReason: '',
+    consent: true
   });
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -67,18 +94,21 @@ export default function App() {
   }, []);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
     if (formErrors[name]) {
       setFormErrors((prev) => ({ ...prev, [name]: null }));
     }
   };
 
-  const handleCountryChange = (country) => {
-    setSelectedCountry(country);
+  const handleCountryChange = (countryKey) => {
+    setSelectedCountry(countryKey);
   };
 
-  const currentPriceInfo = COUNTRY_CONFIG[selectedCountry] || COUNTRY_CONFIG.India;
+  const currentCountryInfo = COUNTRY_CONFIG[selectedCountry] || COUNTRY_CONFIG.India;
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -94,11 +124,11 @@ export default function App() {
     }
 
     if (!formData.whatsapp.trim() || formData.whatsapp.trim().length < 6) {
-      errors.whatsapp = 'Please enter a valid WhatsApp / Phone number.';
+      errors.whatsapp = 'Please enter a valid WhatsApp number.';
     }
 
-    if (!formData.stuckArea.trim()) {
-      errors.stuckArea = 'Please share what feels most stuck right now.';
+    if (!formData.consent) {
+      errors.consent = 'Please agree to receive workshop access updates to continue.';
     }
 
     if (Object.keys(errors).length > 0) {
@@ -109,7 +139,6 @@ export default function App() {
     setIsSubmitting(true);
 
     try {
-      // Store into persistent Database via API
       const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
       await fetch(`${API_BASE}/api/register`, {
         method: 'POST',
@@ -117,12 +146,13 @@ export default function App() {
         body: JSON.stringify({
           fullName: formData.fullName.trim(),
           email: formData.email.trim(),
-          whatsapp: `${currentPriceInfo.code} ${formData.whatsapp.trim()}`,
+          whatsapp: `${currentCountryInfo.code} ${formData.whatsapp.trim()}`,
           country: selectedCountry,
-          fee: currentPriceInfo.price,
-          stuckArea: formData.stuckArea.trim(),
-          liveCommit: formData.liveCommit,
-          goDeeper: formData.goDeeper
+          userRole: formData.userRole,
+          interestReason: formData.interestReason.trim(),
+          consent: formData.consent,
+          fee: 'FREE',
+          stuckArea: formData.interestReason.trim() || formData.userRole
         })
       });
     } catch (err) {
@@ -143,6 +173,49 @@ export default function App() {
     }
   };
 
+  // Google Calendar Event Link (7 Oct 2026, 8:30 PM IST = 15:00 UTC)
+  const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+    'Wake Before The World — Reset Your Mind. Realign Your Life (Day 1 & 2)'
+  )}&dates=20261007T150000Z/20261007T160000Z&details=${encodeURIComponent(
+    'The Narayan Presence 2-Day Live Workshop with Ranu Patel.\n\nSession 1: Wednesday, 7 October 2026 • 8:30 PM IST\nSession 2: Thursday, 8 October 2026 • 8:30 PM IST\n\nDubai: 7:00 PM • New York: 11:00 AM EDT\nZoom links sent via WhatsApp.'
+  )}&location=${encodeURIComponent('Live Online Zoom')}`;
+
+  // Download .ics file for Outlook / Apple Calendar
+  const downloadIcsFile = () => {
+    const icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//The Narayan Presence//Workshop//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      'SUMMARY:Wake Before The World — Reset Your Mind. Realign Your Life (Session 1)',
+      'DESCRIPTION:Day 1 of 2-Day Live Workshop with Ranu Patel. Live on Zoom.',
+      'DTSTART:20261007T150000Z',
+      'DTEND:20261007T160000Z',
+      'LOCATION:Live Online on Zoom',
+      'STATUS:CONFIRMED',
+      'END:VEVENT',
+      'BEGIN:VEVENT',
+      'SUMMARY:Wake Before The World — Reset Your Mind. Realign Your Life (Session 2)',
+      'DESCRIPTION:Day 2 of 2-Day Live Workshop with Ranu Patel. Live on Zoom.',
+      'DTSTART:20261008T150000Z',
+      'DTEND:20261008T160000Z',
+      'LOCATION:Live Online on Zoom',
+      'STATUS:CONFIRMED',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute('download', 'narayan_workshop_oct7_8.ics');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="landing-app">
       {/* Background Decorative Spotlight Glow */}
@@ -156,14 +229,14 @@ export default function App() {
           </a>
 
           <button onClick={() => scrollToSection('register')} className="btn btn-sm btn-hero-highlight">
-            Reserve My Spot →
+            RESERVE MY FREE SEAT →
           </button>
         </div>
       </header>
 
 
       {/* =========================================================================
-           SECTION 1: HERO (Clean, Minimalist 100% VH Above-The-Fold Layout)
+           SECTION 1: HERO
            ========================================================================= */}
       <section id="hero" className="hero-section hero-clean-layout">
         <div className="container hero-clean-grid">
@@ -171,17 +244,15 @@ export default function App() {
           {/* Left Column: Clean Typography & CTA */}
           <div className="hero-clean-left">
             
-            {/* Small handwritten eyebrow / curved note */}
-            <div className="hero-handwritten-tag">
-              <span className="curved-arrow">↳</span>
-              <span className="handwritten-text">Founding Batch · Live 2-Day Workshop</span>
+            {/* Eyebrow Label */}
+            <div className="hero-eyebrow-tag">
+              FREE LIVE ONLINE WORKSHOP FOR PERSONAL GROWTH &amp; SELF-AWARENESS
             </div>
 
             {/* Bold Headline */}
             <h1 className="hero-clean-title">
               Wake Before The World.<br />
-              <span className="hero-highlight">Rewire Your Mind.</span><br />
-              <span className="hero-title-sub">Become The Person Your Life Is Waiting For.</span>
+              <span className="hero-highlight">Reset Your Mind. Realign Your Life.</span>
             </h1>
 
             {/* Coach Subtitle */}
@@ -193,19 +264,34 @@ export default function App() {
 
             {/* Subheadline description */}
             <p className="hero-clean-desc">
-              You've read the books. Tried the routines. Followed the advice. And you still wake up tired, stuck, and waiting for something to change. This isn't another routine — it's the shift underneath all of them.
+              Start your day with greater clarity, intention and self-awareness—before the noise of the world takes over.
             </p>
+
+            {/* Date / Time Block */}
+            <div className="hero-datetime-card">
+              <div className="datetime-row">
+                <span className="dt-icon">📅</span>
+                <div>
+                  <strong>WEDNESDAY, 7 OCTOBER 2026 • 8:30 PM IST</strong><br />
+                  <strong>THURSDAY, 8 OCTOBER 2026 • 8:30 PM IST</strong>
+                </div>
+              </div>
+              <div className="datetime-sub">
+                Dubai 7:00 PM • New York 11:00 AM*
+                <small className="dt-note">*U.S. time varies by location and daylight saving time.</small>
+              </div>
+            </div>
 
             {/* Compact Info Badges Row */}
             <div className="hero-clean-chips">
               <span className="clean-chip">
-                <span className="chip-icon">📅</span> This Weekend Live (Sat &amp; Sun) · IST / GST / ET
-              </span>
-              <span className="clean-chip">
-                <span className="chip-icon">🎥</span> Live on Zoom (Not recorded)
+                <span className="chip-icon">🎥</span> 2 Live Online Sessions (60 Mins Each)
               </span>
               <span className="clean-chip">
                 <span className="chip-icon">🌐</span> English with Hindi support
+              </span>
+              <span className="clean-chip">
+                <span className="chip-icon">🎁</span> 100% Free Workshop
               </span>
             </div>
 
@@ -216,11 +302,11 @@ export default function App() {
                 className="btn btn-hero-highlight"
                 id="hero-primary-cta"
               >
-                Reserve My Free Spot →
+                RESERVE MY FREE SEAT →
               </button>
 
               <div className="hero-clean-trust">
-                <span>🌅 100% Free Live Workshop</span>
+                <span>🌅 100% Free Live Online</span>
                 <span className="trust-dot">•</span>
                 <span>🔒 Small Founding Batch (20 Capped Seats)</span>
               </div>
@@ -314,16 +400,16 @@ export default function App() {
 
 
       {/* =========================================================================
-           SECTION 3: THE FRAMEWORK (The Narayan Method — 4 Shifts)
+           SECTION 3: THE NARAYAN METHOD — 4 SHIFTS TOWARD CONSCIOUS LIVING
            ========================================================================= */}
       <section id="framework" className="section-padding framework-section">
         <div className="container">
           
           <div className="section-header text-center">
-            <span className="badge-pill">The Core Philosophy &amp; Architecture</span>
-            <h2 className="section-title">The Narayan Method — 4 Shifts That Change Everything</h2>
+            <span className="badge-pill">The Core Framework</span>
+            <h2 className="section-title">The Narayan Method — 4 Shifts Toward Conscious Living</h2>
             <p className="section-subtitle max-w-750">
-              This is the bridge that makes <strong>Brahma Muhurat</strong> and <strong>Manifestation</strong> feel like one cohesive method instead of two unrelated topics stapled together.
+              A simple, teachable framework that connects awareness with everyday action.
             </p>
           </div>
 
@@ -335,10 +421,10 @@ export default function App() {
                 <div className="shift-line"></div>
               </div>
               <div className="shift-body">
-                <div className="shift-tag">STEP 1 · THE ANCHOR</div>
-                <h3 className="shift-heading">AWAKEN — The Brahma Muhurat Practice</h3>
+                <div className="shift-tag">STEP 1 · PAUSE</div>
+                <h3 className="shift-heading">Pause — Create Space to Observe Yourself</h3>
                 <p className="shift-desc">
-                  Wake before the world does. Meet stillness before stress finds you. The ancient practice of rising in Brahma Muhurat, explained simply — no complicated rituals, no overwhelm. Just a shift in timing that changes how your entire day, and your nervous system, responds to it.
+                  Learn to step out of autopilot before stress finds you. Meet morning stillness and build a calm nervous system buffer before the demands of the day begin.
                 </p>
                 <div className="shift-benefit-tag">🌿 Stillness before stress finds you</div>
               </div>
@@ -351,12 +437,12 @@ export default function App() {
                 <div className="shift-line"></div>
               </div>
               <div className="shift-body">
-                <div className="shift-tag">STEP 2 · THE CLEANSE</div>
-                <h3 className="shift-heading">REWIRE — The Subconscious Reset</h3>
+                <div className="shift-tag">STEP 2 · NOTICE</div>
+                <h3 className="shift-heading">Notice — Understand Thoughts, Emotions &amp; Patterns</h3>
                 <p className="shift-desc">
-                  Your thoughts today were installed years ago, by people and moments you didn't choose. Learn how to identify the limiting beliefs quietly running your life in the background — and how to begin releasing them.
+                  Identify unconscious mental loops and limiting beliefs quietly running your decisions. Gain the clarity to observe your thoughts without getting trapped by them.
                 </p>
-                <div className="shift-benefit-tag">🧠 Identify &amp; release unconscious programming</div>
+                <div className="shift-benefit-tag">🧠 Self-awareness over unconscious programming</div>
               </div>
             </div>
 
@@ -367,12 +453,12 @@ export default function App() {
                 <div className="shift-line"></div>
               </div>
               <div className="shift-body">
-                <div className="shift-tag">STEP 3 · THE VISION</div>
-                <h3 className="shift-heading">ALIGN — The Manifestation Framework</h3>
+                <div className="shift-tag">STEP 3 · REALIGN</div>
+                <h3 className="shift-heading">Realign — Reconnect Actions With What Matters</h3>
                 <p className="shift-desc">
-                  Move from wishing to intentionally designing. A simple, grounded approach to visualization and intention-setting — without the vague "just think positive" advice that never actually changes anything.
+                  Move from scattered wishing to grounded intention. Realign your daily focus with your true values and clear priorities — without toxic positivity or vague advice.
                 </p>
-                <div className="shift-benefit-tag">🎯 Grounded intention without toxic positivity</div>
+                <div className="shift-benefit-tag">🎯 Grounded intention and genuine priority alignment</div>
               </div>
             </div>
 
@@ -383,12 +469,12 @@ export default function App() {
                 <div className="shift-line"></div>
               </div>
               <div className="shift-body">
-                <div className="shift-tag">STEP 4 · THE EXECUTION</div>
-                <h3 className="shift-heading">ACT — The First 90 Minutes</h3>
+                <div className="shift-tag">STEP 4 · PRACTICE</div>
+                <h3 className="shift-heading">Practice — Turn Awareness Into Small Daily Actions</h3>
                 <p className="shift-desc">
-                  Clarity without action is just a nice feeling. Learn how to turn your mornings into momentum that carries through your entire day, not just the hour you're awake for it.
+                  Awareness without action fades fast. Learn how to transform morning reflections into small, repeatable daily habits that carry momentum throughout your entire day.
                 </p>
-                <div className="shift-benefit-tag">⚡ Momentum that powers your entire day</div>
+                <div className="shift-benefit-tag">⚡ Small, repeatable daily actions that last</div>
               </div>
             </div>
           </div>
@@ -397,7 +483,8 @@ export default function App() {
           <div className="framework-synthesis">
             <div className="synthesis-icon">✨</div>
             <p className="synthesis-text">
-              <strong>No complex rituals. Just a sequence that works</strong> — because stillness (<em>Awaken</em>) creates the mental space that inner work (<em>Rewire, Align</em>) needs, and inner work is worthless without real-world follow-through (<em>Act</em>).
+              <strong>LEARN → PRACTICE → EXPERIENCE → REFLECT → IMPROVE → SHARE</strong><br />
+              A sequential method to quiet mental noise, understand your patterns, and build intentional daily habits.
             </p>
           </div>
 
@@ -414,54 +501,62 @@ export default function App() {
           <div className="section-header text-center">
             <span className="badge-pill">Tangible Outcomes</span>
             <h2 className="section-title">What You'll Walk Away With</h2>
-            <p className="section-subtitle">Real, grounded tools you will implement during the 2 live days and take forward:</p>
+            <p className="section-subtitle">Practical, grounded takeaways and frameworks you can use immediately:</p>
           </div>
 
           <div className="outcomes-grid">
             <div className="outcome-card">
               <div className="outcome-bullet-badge">01</div>
               <div className="outcome-content">
-                <h4>Circadian &amp; Neural Science</h4>
-                <p>Why the hour before sunrise affects your brain differently than any other hour of the day.</p>
+                <h4>Thought &amp; Habit Clarity</h4>
+                <p>A clearer understanding of your thoughts, habits and unconscious daily patterns.</p>
               </div>
             </div>
 
             <div className="outcome-card">
               <div className="outcome-bullet-badge">02</div>
               <div className="outcome-content">
-                <h4>Rapid Mental De-escalation</h4>
-                <p>A simple way to quiet mental noise — without needing to meditate for an hour.</p>
+                <h4>Self-Awareness Framework</h4>
+                <p>A practical self-awareness framework you can easily use on your own after the workshop.</p>
               </div>
             </div>
 
             <div className="outcome-card">
               <div className="outcome-bullet-badge">03</div>
               <div className="outcome-content">
-                <h4>Belief Uncovering Protocol</h4>
-                <p>How to identify (and start releasing) one limiting belief that's been quietly running your life.</p>
+                <h4>Mindfulness &amp; Reflection</h4>
+                <p>Simple mindfulness and reflection practices to explore without complex rules or strain.</p>
               </div>
             </div>
 
             <div className="outcome-card">
               <div className="outcome-bullet-badge">04</div>
               <div className="outcome-content">
-                <h4>Sustainable Manifestation</h4>
-                <p>A visualization + intention-setting practice you can actually stick to.</p>
+                <h4>Priority &amp; Intention Clarity</h4>
+                <p>Greater clarity around your true priorities and how to live with daily intention.</p>
               </div>
             </div>
 
             <div className="outcome-card">
               <div className="outcome-bullet-badge">05</div>
               <div className="outcome-content">
-                <h4>Ready-To-Use Morning Blueprint</h4>
-                <p>A 90-minute morning structure you can start using the very next day.</p>
+                <h4>Repeatable Action System</h4>
+                <p>A framework for turning insights and learning into small, repeatable everyday actions.</p>
+              </div>
+            </div>
+
+            <div className="outcome-card">
+              <div className="outcome-bullet-badge">06</div>
+              <div className="outcome-content">
+                <h4>Conscious Morning Approach</h4>
+                <p>A more conscious, peaceful approach to beginning your day before world distractions start.</p>
               </div>
             </div>
           </div>
 
           <div className="text-center mt-40">
             <button onClick={() => scrollToSection('register')} className="btn btn-hero-highlight btn-md">
-              Join The 2-Day Experience →
+              RESERVE MY FREE SEAT →
             </button>
           </div>
 
@@ -470,7 +565,7 @@ export default function App() {
 
 
       {/* =========================================================================
-           SECTION 5: MEET YOUR COACH
+           SECTION 5: FOUNDER STORY — WHY I CREATED THE NARAYAN PRESENCE
            ========================================================================= */}
       <section id="coach" className="section-padding coach-section">
         <div className="container">
@@ -478,30 +573,46 @@ export default function App() {
           <div className="coach-container">
             <div className="coach-image-column">
               <div className="coach-photo-frame">
-                <img src={coachImg} alt="Ranu Patel Wellness Coach" className="coach-main-photo" />
+                <img src={coachImg} alt="Ranu Patel - Co-Founder" className="coach-main-photo" />
                 <div className="coach-experience-badge">
                   <span className="exp-years">15+</span>
-                  <span className="exp-label">Years Corporate &amp; Wellness Mastery</span>
+                  <span className="exp-label">Years Corporate &amp; Growth Experience</span>
                 </div>
               </div>
             </div>
 
             <div className="coach-bio-column">
-              <span className="badge-pill">Meet Your Coach</span>
+              <span className="badge-pill">Why I Created The Narayan Presence</span>
               <h2 className="coach-name-heading">Ranu Patel</h2>
               <p className="coach-title-subtitle">Co-Founder | Life Transformation Coach &amp; Consultant</p>
               
               <div className="coach-story-card">
                 <p className="coach-quote-para">
-                  "I'm Ranu — and I built this workshop because I lived the exact thing you're feeling right now. For 15+ years, I built growth systems for businesses across the U.S. — the kind of high-output, always-on life that looks successful from the outside. But somewhere in the deadlines and time-zone calls, I burned out completely and lost touch with my own peace. Rebuilding that — one real morning at a time — is what led me here. This workshop is the exact system I used to come back to myself, and I'm inviting you to be one of the first to go through it with me, live."
+                  For years, I focused on helping businesses grow—websites, digital strategy, SEO, branding, lead generation and technology.
+                </p>
+                <p className="coach-quote-para">
+                  But eventually I started asking myself: <em>What about the person behind the work?</em>
+                </p>
+                <p className="coach-quote-para">
+                  The professional dealing with pressure. The parent balancing responsibilities. The entrepreneur carrying endless decisions. The person who spends so much time caring for others that they forget to pause for themselves.
+                </p>
+                <p className="coach-quote-para">
+                  I began learning from experienced teachers and experts across personal growth, mindfulness, mindset, self-awareness and reflective practices.
                 </p>
                 
-                <div className="coach-founding-note">
-                  <div className="note-icon">🤝</div>
-                  <p>
-                    <strong>"This is the very first live batch of this workshop.</strong> I'm not promising you a program that's already helped thousands of people. I'm inviting you to be one of the first people I personally walk through this with — <em>live, with real access to me, not a pre-recorded funnel.</em>"
-                  </p>
+                <div className="coach-principle-box" style={{ background: '#FFFDF9', border: '1px solid #FDE68A', padding: '14px 18px', borderRadius: '10px', margin: '16px 0' }}>
+                  <strong style={{ color: '#B45309', fontSize: '0.88rem', letterSpacing: '0.04em' }}>MY GUIDING PRINCIPLE:</strong>
+                  <div style={{ color: '#0F172A', fontWeight: 800, fontSize: '1rem', marginTop: '4px' }}>
+                    LEARN → PRACTICE → EXPERIENCE → REFLECT → IMPROVE → SHARE
+                  </div>
                 </div>
+
+                <p className="coach-quote-para">
+                  I started applying what I learned to my own life first. That personal journey became the foundation of <strong>The Narayan Presence</strong>.
+                </p>
+                <p className="coach-quote-para" style={{ color: '#D97706', fontWeight: 700 }}>
+                  This workshop is an invitation to begin that journey for yourself.
+                </p>
               </div>
 
             </div>
@@ -512,63 +623,63 @@ export default function App() {
 
 
       {/* =========================================================================
-           SECTION 6: FOUNDING BATCH BONUSES
+           SECTION 6: FOUNDING BATCH — SPECIAL INCLUSIONS
            ========================================================================= */}
       <section id="bonuses" className="section-padding bonuses-section">
         <div className="container">
           
           <div className="section-header text-center">
-            <span className="badge-pill">Included At No Extra Cost</span>
-            <h2 className="section-title">Founding Batch Bonuses</h2>
-            <p className="section-subtitle">Because You're Part Of The Founding Batch, You'll Also Get:</p>
+            <span className="badge-pill">Founding Batch Benefits</span>
+            <h2 className="section-title">FOUNDING BATCH — SPECIAL INCLUSIONS</h2>
+            <p className="section-subtitle">Exclusive materials and frameworks provided to live attendees in this cohort:</p>
           </div>
 
-          <div className="bonuses-grid">
-            {/* Bonus 1 */}
+          <div className="bonuses-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}>
+            {/* Inclusion 1 */}
             <div className="bonus-card">
               <div className="bonus-header">
-                <span className="bonus-tag">BONUS #1</span>
-                <span className="bonus-icon">🎁</span>
+                <span className="bonus-tag">INCLUSION #1</span>
+                <span className="bonus-icon">📝</span>
               </div>
-              <div className="bonus-preview-art workbook-art">
-                <div className="art-icon">📖</div>
-                <span>Digital PDF Resource</span>
-              </div>
-              <h3 className="bonus-title">The Awakened Mornings Workbook (PDF)</h3>
+              <h3 className="bonus-title">Guided Reflection Worksheet</h3>
               <p className="bonus-desc">
-                Printable journal prompts, daily 90-minute structure templates, and belief-reframing worksheets to cement your practice.
+                Structured reflection exercises and prompts to help you identify current habits, clarify personal priorities, and track your daily mindset shifts.
               </p>
             </div>
 
-            {/* Bonus 2 */}
+            {/* Inclusion 2 */}
             <div className="bonus-card">
               <div className="bonus-header">
-                <span className="bonus-tag">BONUS #2</span>
-                <span className="bonus-icon">🎁</span>
+                <span className="bonus-tag">INCLUSION #2</span>
+                <span className="bonus-icon">🌅</span>
               </div>
-              <div className="bonus-preview-art audio-art">
-                <div className="art-icon">🎧</div>
-                <span>High-Fidelity Audio</span>
-              </div>
-              <h3 className="bonus-title">A Guided Brahma Muhurat Meditation (Audio)</h3>
+              <h3 className="bonus-title">Morning Practice Guide</h3>
               <p className="bonus-desc">
-                Calming, voice-guided pre-dawn audio track engineered to shift brainwaves from Beta to Theta/Alpha with zero effort.
+                A simple, actionable guide to building a quiet morning reflection window without complicated rituals, rigid rules, or overwhelm.
               </p>
             </div>
 
-            {/* Bonus 3 */}
+            {/* Inclusion 3 */}
             <div className="bonus-card">
               <div className="bonus-header">
-                <span className="bonus-tag">BONUS #3</span>
-                <span className="bonus-icon">🎁</span>
+                <span className="bonus-tag">INCLUSION #3</span>
+                <span className="bonus-icon">📚</span>
               </div>
-              <div className="bonus-preview-art community-art">
-                <div className="art-icon">👥</div>
-                <span>Private Mastermind</span>
-              </div>
-              <h3 className="bonus-title">Private Community Access</h3>
+              <h3 className="bonus-title">Workshop Notes &amp; Resources</h3>
               <p className="bonus-desc">
-                Exclusive cohort community for continued accountability, direct peer interactions, and ongoing guidance after the workshop.
+                Comprehensive summary notes, key frameworks, and recommended reference readings covered during the 2 live interactive sessions.
+              </p>
+            </div>
+
+            {/* Inclusion 4 */}
+            <div className="bonus-card">
+              <div className="bonus-header">
+                <span className="bonus-tag">INCLUSION #4</span>
+                <span className="bonus-icon">🧭</span>
+              </div>
+              <h3 className="bonus-title">Personal Growth Framework</h3>
+              <p className="bonus-desc">
+                A visual roadmap connecting self-awareness, intentional choices, and daily practice for sustained long-term clarity.
               </p>
             </div>
           </div>
@@ -578,31 +689,31 @@ export default function App() {
 
 
       {/* =========================================================================
-           SECTION 7: WHO SHOULD JOIN
+           SECTION 7: WHO IS THIS WORKSHOP FOR?
            ========================================================================= */}
       <section id="who-should-join" className="section-padding who-section">
         <div className="container">
           
           <div className="section-header text-center">
             <span className="badge-pill">Target Audience</span>
-            <h2 className="section-title">Who Should Join</h2>
-            <p className="section-subtitle">This workshop is crafted intentionally for those ready for meaningful internal realignment:</p>
+            <h2 className="section-title">WHO IS THIS WORKSHOP FOR?</h2>
+            <p className="section-subtitle">This 2-day live experience is crafted for anyone ready for meaningful internal growth:</p>
           </div>
 
           <div className="who-grid">
             <div className="who-card">
-              <div className="who-avatar">💼</div>
+              <div className="who-avatar">🎓</div>
               <div className="who-text">
-                <h4>Working Professionals</h4>
-                <p>Feeling stuck on autopilot and craving mental clarity and true energy.</p>
+                <h4>Students &amp; Seekers</h4>
+                <p>Who need calm focus, reduced mental noise, and daily discipline.</p>
               </div>
             </div>
 
             <div className="who-card">
-              <div className="who-avatar">🚀</div>
+              <div className="who-avatar">💼</div>
               <div className="who-text">
-                <h4>Business Owners &amp; Entrepreneurs</h4>
-                <p>Wanting focused clarity and sustained vitality to scale with poise.</p>
+                <h4>Working Professionals</h4>
+                <p>Dealing with pressure, autopilot routines, and looking for renewed mental clarity.</p>
               </div>
             </div>
 
@@ -610,23 +721,31 @@ export default function App() {
               <div className="who-avatar">🏡</div>
               <div className="who-text">
                 <h4>Parents &amp; Homemakers</h4>
-                <p>Craving a sacred moment in the day that is truly and unapologetically theirs.</p>
+                <p>Balancing family responsibilities who crave intentional time for themselves.</p>
               </div>
             </div>
 
             <div className="who-card">
-              <div className="who-avatar">🎓</div>
+              <div className="who-avatar">🚀</div>
               <div className="who-text">
-                <h4>Students &amp; Seekers</h4>
-                <p>Who need razor-sharp focus, mental resilience, and quiet confidence.</p>
+                <h4>Entrepreneurs &amp; Founders</h4>
+                <p>Carrying high-stakes decisions and seeking steady presence and grounded focus.</p>
               </div>
             </div>
 
-            <div className="who-card who-card-wide">
+            <div className="who-card">
+              <div className="who-avatar">🤝</div>
+              <div className="who-text">
+                <h4>Service Providers &amp; Coaches</h4>
+                <p>Pouring energy into others and needing to recharge their own internal foundation.</p>
+              </div>
+            </div>
+
+            <div className="who-card">
               <div className="who-avatar">🌱</div>
               <div className="who-text">
-                <h4>Anyone Feeling Ready for Real Shift</h4>
-                <p>Anyone who feels like they're doing "everything right" and still not moving forward.</p>
+                <h4>Anyone Ready to Grow</h4>
+                <p>Anyone who wants to break old autopilot patterns and begin living consciously.</p>
               </div>
             </div>
           </div>
@@ -636,36 +755,63 @@ export default function App() {
 
 
       {/* =========================================================================
-           SECTION 8: FOUNDING BATCH URGENCY (Honest Scarcity)
+           SECTION 8: 2-DAY LIVE SCHEDULE & TIME ZONES
            ========================================================================= */}
       <section className="urgency-section">
         <div className="container">
           <div className="urgency-card">
             <div className="urgency-badge">
-              <span className="lock-icon">🔒</span> HONEST SCARCITY · STRICT INTAKE
+              <span className="lock-icon">🔒</span> FOUNDING BATCH · 2-DAY LIVE SCHEDULE
             </div>
             <h3 className="urgency-quote">
-              "This is the very first live batch of this workshop — capped at 20 people so I can actually be present with everyone live. Once this batch is full, registration closes until the next one."
+              "Day 1 creates awareness and the core framework. Day 2 focuses on practice, reflection, implementation and live Q&amp;A."
             </h3>
             
-            <div className="urgency-stats">
-              <div className="stat-box">
-                <span className="stat-val">20</span>
-                <span className="stat-lbl">Max Capacity</span>
-              </div>
-              <div className="stat-box highlight">
-                <span className="stat-val">{seatsLeft}</span>
-                <span className="stat-lbl">Remaining Seats</span>
-              </div>
-              <div className="stat-box">
-                <span className="stat-val">2</span>
-                <span className="stat-lbl">Live Days</span>
-              </div>
+            <div className="faq-table-wrap" style={{ margin: '24px 0' }}>
+              <table className="tz-table">
+                <thead>
+                  <tr>
+                    <th>Audience / Region</th>
+                    <th>Session 1 (Day 1)</th>
+                    <th>Session 2 (Day 2)</th>
+                    <th>Schedule Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>🇮🇳 <strong>India (IST)</strong></td>
+                    <td>7 Oct • 8:30 PM IST</td>
+                    <td>8 Oct • 8:30 PM IST</td>
+                    <td>Primary evening session (60 mins)</td>
+                  </tr>
+                  <tr>
+                    <td>🇦🇪 <strong>Dubai / UAE (GST)</strong></td>
+                    <td>7 Oct • 7:00 PM</td>
+                    <td>8 Oct • 7:00 PM</td>
+                    <td>Convenient evening live window</td>
+                  </tr>
+                  <tr>
+                    <td>🇺🇸 <strong>New York (EDT)</strong></td>
+                    <td>7 Oct • 11:00 AM</td>
+                    <td>8 Oct • 11:00 AM</td>
+                    <td>U.S. daylight time daytime option*</td>
+                  </tr>
+                  <tr>
+                    <td>🇺🇸 <strong>Los Angeles (PDT)</strong></td>
+                    <td>7 Oct • 8:00 AM</td>
+                    <td>8 Oct • 8:00 AM</td>
+                    <td>Early morning West Coast</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p className="mt-15 text-muted" style={{ textAlign: 'center' }}>
+                <small><em>*U.S. time varies by location and daylight saving time. Zoom links delivered directly via WhatsApp.</em></small>
+              </p>
             </div>
 
             <div className="urgency-cta">
               <button onClick={() => scrollToSection('register')} className="btn btn-hero-highlight btn-lg">
-                Lock In Your Founding Seat Now
+                RESERVE MY FREE SEAT →
               </button>
             </div>
           </div>
@@ -682,7 +828,7 @@ export default function App() {
           <div className="section-header text-center">
             <span className="badge-pill">Got Questions?</span>
             <h2 className="section-title">Frequently Asked Questions</h2>
-            <p className="section-subtitle">Everything you need to know before joining this weekend's live cohort.</p>
+            <p className="section-subtitle">Everything you need to know before joining this live cohort.</p>
           </div>
 
           <div className="faq-accordion">
@@ -694,7 +840,7 @@ export default function App() {
               </button>
               <div className="faq-answer">
                 <p>
-                  No. Brahma Muhurat is where we start, but the real work is what happens in your mind — releasing what's been holding you back and learning to intentionally direct your energy and focus.
+                  No. Rising early is a supportive practice, but the real focus is on self-awareness, understanding your mental patterns, and learning how to intentionally direct your focus and daily actions.
                 </p>
               </div>
             </div>
@@ -707,7 +853,7 @@ export default function App() {
               </button>
               <div className="faq-answer">
                 <p>
-                  This isn't about forcing yourself into a routine that doesn't fit. It's about understanding why this specific window works differently for your mind and body — then deciding for yourself if it's worth trying.
+                  Yes. This is not about forcing yourself into a rigid routine. It's about understanding how to create intentional mental space and calmness during the day, regardless of your current schedule.
                 </p>
               </div>
             </div>
@@ -715,12 +861,12 @@ export default function App() {
             {/* FAQ 3 */}
             <div className={`faq-item ${openFaqIndex === 2 ? 'active' : ''}`}>
               <button className="faq-trigger" onClick={() => setOpenFaqIndex(openFaqIndex === 2 ? -1 : 2)}>
-                <span className="faq-question">Will there be a recording?</span>
+                <span className="faq-question">Why is the workshop split across 2 days?</span>
                 <span className="faq-arrow">+</span>
               </button>
               <div className="faq-answer">
                 <p>
-                  This is a live-only experience, by design. The exercises work best when you're present and doing them in real time with the group.
+                  Day 1 is designed to build awareness and share the core 4-step framework. Day 2 focuses on practice, personal reflection, habit implementation, and live interactive Q&amp;A.
                 </p>
               </div>
             </div>
@@ -728,69 +874,31 @@ export default function App() {
             {/* FAQ 4 */}
             <div className={`faq-item ${openFaqIndex === 3 ? 'active' : ''}`}>
               <button className="faq-trigger" onClick={() => setOpenFaqIndex(openFaqIndex === 3 ? -1 : 3)}>
-                <span className="faq-question">I'm in the US / UAE — what time is this in my time zone?</span>
+                <span className="faq-question">What time is this in my time zone?</span>
                 <span className="faq-arrow">+</span>
               </button>
               <div className="faq-answer">
                 <p>
-                  See the time zone table below — we've converted it for you:
+                  Both sessions take place on <strong>Wednesday, 7 October &amp; Thursday, 8 October 2026</strong> at:
                 </p>
-                <div className="faq-table-wrap">
-                  <table className="tz-table">
-                    <thead>
-                      <tr>
-                        <th>Region</th>
-                        <th>Time Zone</th>
-                        <th>Schedule Window</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>🇮🇳 <strong>India</strong></td>
-                        <td>IST (Indian Standard Time)</td>
-                        <td>Early Morning Live Cohort</td>
-                      </tr>
-                      <tr>
-                        <td>🇦🇪 <strong>UAE</strong></td>
-                        <td>GST (Gulf Standard Time)</td>
-                        <td>Early Morning Synchronized</td>
-                      </tr>
-                      <tr>
-                        <td>🇺🇸 <strong>USA</strong></td>
-                        <td>ET (Eastern Time)</td>
-                        <td>Coordinated Live Session</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <p className="mt-15 text-muted">
-                  <small><em>Exact calendar invites &amp; Zoom links are automatically sent to your WhatsApp immediately upon registration.</em></small>
-                </p>
+                <ul style={{ paddingLeft: '20px', marginTop: '10px', color: 'var(--text-secondary)' }}>
+                  <li><strong>India (IST):</strong> 8:30 PM – 9:30 PM</li>
+                  <li><strong>Dubai (GST):</strong> 7:00 PM – 8:00 PM</li>
+                  <li><strong>New York (EDT):</strong> 11:00 AM – 12:00 PM*</li>
+                  <li><strong>London (BST):</strong> 4:00 PM – 5:00 PM</li>
+                </ul>
               </div>
             </div>
 
             {/* FAQ 5 */}
             <div className={`faq-item ${openFaqIndex === 4 ? 'active' : ''}`}>
               <button className="faq-trigger" onClick={() => setOpenFaqIndex(openFaqIndex === 4 ? -1 : 4)}>
-                <span className="faq-question">What happens after the workshop?</span>
+                <span className="faq-question">Is this workshop religious or sectarian?</span>
                 <span className="faq-arrow">+</span>
               </button>
               <div className="faq-answer">
                 <p>
-                  You'll receive your bonuses, and if what you learn genuinely resonates, you'll have the option to go deeper with us afterward — no pressure either way.
-                </p>
-              </div>
-            </div>
-
-            {/* FAQ 6 */}
-            <div className={`faq-item ${openFaqIndex === 5 ? 'active' : ''}`}>
-              <button className="faq-trigger" onClick={() => setOpenFaqIndex(openFaqIndex === 5 ? -1 : 5)}>
-                <span className="faq-question">Is this workshop religious?</span>
-                <span className="faq-arrow">+</span>
-              </button>
-              <div className="faq-answer">
-                <p>
-                  No. Brahma Muhurat is referenced as a time-based practice rooted in tradition, but the workshop itself is practical and secular — for anyone, regardless of background or belief.
+                  No. The workshop is entirely practical, secular, and focused on personal growth, mindset, self-reflection, and intentional living for people of all backgrounds.
                 </p>
               </div>
             </div>
@@ -801,222 +909,281 @@ export default function App() {
 
 
       {/* =========================================================================
-           SECTION 10: REGISTRATION FORM (with Qualifying Questions)
+           SECTION 10: REGISTRATION FORM / THANK-YOU PAGE
            ========================================================================= */}
       <section id="register" className="section-padding register-section">
         <div className="container max-w-850">
           
           <div className="form-wrapper-card">
-            <div className="form-card-header text-center">
-              <span className="badge-pill">Founding Batch Application</span>
-              <h2 className="form-title">Reserve Your Spot</h2>
-              <p className="form-subtitle">
-                Single global registration with smart time-zone routing for your WhatsApp reminders.
-              </p>
-
-              {/* Pricing Pill Selector */}
-              <div className="fee-display-container">
-                <div className="fee-label">Founding Batch Access:</div>
-                <div className="fee-pill-badges">
-                  <span className="fee-badge active-badge free-tag">🎁 100% FREE Access</span>
-                  <span className="fee-badge">No Credit Card Required</span>
-                  <span className="fee-badge">Limited to 20 Founding Seats</span>
-                </div>
-              </div>
-            </div>
-
+            
             {!isSubmitted ? (
-              <form onSubmit={handleFormSubmit} className="registration-form" noValidate>
-                {/* Field 1: Full Name */}
-                <div className={`form-group ${formErrors.fullName ? 'has-error' : ''}`}>
-                  <label htmlFor="fullName" className="form-label">1. Full Name <span className="required">*</span></label>
-                  <input
-                    type="text"
-                    id="fullName"
-                    name="fullName"
-                    className="form-input"
-                    placeholder="e.g. Priya Sharma or Michael Vance"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.fullName && <span className="error-msg">{formErrors.fullName}</span>}
+              <>
+                <div className="form-card-header text-center">
+                  <span className="badge-pill">Free Registration</span>
+                  <h2 className="form-title">Reserve Your Seat</h2>
+                  <p className="form-subtitle">
+                    Wednesday 7 Oct &amp; Thursday 8 Oct 2026 • 8:30 PM IST (Dubai 7 PM • NY 11 AM*)
+                  </p>
+
+                  <div className="fee-display-container">
+                    <div className="fee-pill-badges">
+                      <span className="fee-badge active-badge free-tag">🎁 100% Free Live Online Workshop</span>
+                      <span className="fee-badge">No Credit Card Required</span>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Field 2: Email */}
-                <div className={`form-group ${formErrors.email ? 'has-error' : ''}`}>
-                  <label htmlFor="email" className="form-label">2. Email Address <span className="required">*</span></label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="form-input"
-                    placeholder="you@example.com"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                  />
-                  {formErrors.email && <span className="error-msg">{formErrors.email}</span>}
-                </div>
-
-                {/* Field 3: WhatsApp / Phone */}
-                <div className={`form-group ${formErrors.whatsapp ? 'has-error' : ''}`}>
-                  <label htmlFor="whatsapp" className="form-label">3. WhatsApp / Phone Number <span className="required">*</span></label>
-                  <div className="phone-input-group">
-                    <span className="country-prefix">{currentPriceInfo.code}</span>
+                <form onSubmit={handleFormSubmit} className="registration-form" noValidate>
+                  {/* Field 1: Full Name */}
+                  <div className={`form-group ${formErrors.fullName ? 'has-error' : ''}`}>
+                    <label htmlFor="fullName" className="form-label">
+                      1. Full Name <span className="required">*</span>
+                    </label>
                     <input
-                      type="tel"
-                      id="whatsapp"
-                      name="whatsapp"
-                      className="form-input phone-field"
-                      placeholder={currentPriceInfo.placeholder}
-                      value={formData.whatsapp}
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      className="form-input"
+                      placeholder="What should we call you?"
+                      value={formData.fullName}
+                      onChange={handleInputChange}
+                    />
+                    {formErrors.fullName && <span className="error-msg">{formErrors.fullName}</span>}
+                  </div>
+
+                  {/* Field 2: Email Address */}
+                  <div className={`form-group ${formErrors.email ? 'has-error' : ''}`}>
+                    <label htmlFor="email" className="form-label">
+                      2. Email Address <span className="required">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      className="form-input"
+                      placeholder="Where should we send your workshop details?"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                    />
+                    {formErrors.email && <span className="error-msg">{formErrors.email}</span>}
+                  </div>
+
+                  {/* Field 3: WhatsApp Number */}
+                  <div className={`form-group ${formErrors.whatsapp ? 'has-error' : ''}`}>
+                    <label htmlFor="whatsapp" className="form-label">
+                      3. WhatsApp Number <span className="required">*</span>
+                    </label>
+                    <div className="phone-input-group">
+                      <span className="country-prefix">{currentCountryInfo.code}</span>
+                      <input
+                        type="tel"
+                        id="whatsapp"
+                        name="whatsapp"
+                        className="form-input phone-field"
+                        placeholder={currentCountryInfo.placeholder}
+                        value={formData.whatsapp}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <span className="field-hint">For workshop reminders, Zoom links, and important session updates.</span>
+                    {formErrors.whatsapp && <span className="error-msg">{formErrors.whatsapp}</span>}
+                  </div>
+
+                  {/* Field 4: Country */}
+                  <div className="form-group">
+                    <label className="form-label">
+                      4. Country <span className="required">*</span>
+                    </label>
+                    <div className="radio-cards-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))' }}>
+                      {Object.keys(COUNTRY_CONFIG).map((countryKey) => {
+                        const item = COUNTRY_CONFIG[countryKey];
+                        return (
+                          <label
+                            key={countryKey}
+                            className={`radio-card ${selectedCountry === countryKey ? 'selected' : ''}`}
+                            onClick={() => handleCountryChange(countryKey)}
+                          >
+                            <input
+                              type="radio"
+                              name="country"
+                              value={countryKey}
+                              checked={selectedCountry === countryKey}
+                              onChange={() => handleCountryChange(countryKey)}
+                            />
+                            <span className="radio-card-content">
+                              <span className="flag-icon">{item.flag}</span>
+                              <span className="country-name">{item.name}</span>
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Field 5: What best describes you? */}
+                  <div className="form-group">
+                    <label htmlFor="userRole" className="form-label">
+                      5. What best describes you? <span className="required">*</span>
+                    </label>
+                    <select
+                      id="userRole"
+                      name="userRole"
+                      className="form-input"
+                      value={formData.userRole}
+                      onChange={handleInputChange}
+                      style={{ padding: '12px 14px', borderRadius: 'var(--radius-sm)' }}
+                    >
+                      {ROLE_OPTIONS.map((role) => (
+                        <option key={role} value={role}>{role}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Field 6: What made you interested in joining this workshop? (Optional) */}
+                  <div className="form-group">
+                    <label htmlFor="interestReason" className="form-label">
+                      6. What made you interested in joining this workshop? <small className="text-muted">(Optional)</small>
+                    </label>
+                    <textarea
+                      id="interestReason"
+                      name="interestReason"
+                      rows={3}
+                      className="form-input form-textarea"
+                      placeholder="e.g. Personal growth, overthinking, lack of clarity, stress, habits, mindfulness, purpose, simply wanting to learn..."
+                      value={formData.interestReason}
                       onChange={handleInputChange}
                     />
                   </div>
-                  <span className="field-hint">We send your private Zoom link and reminder directly on WhatsApp.</span>
-                  {formErrors.whatsapp && <span className="error-msg">{formErrors.whatsapp}</span>}
-                </div>
 
-                {/* Field 4: Which country are you joining from? */}
-                <div className="form-group">
-                  <label className="form-label">4. Which country are you joining from? <span className="required">*</span></label>
-                  <div className="radio-cards-grid four-cols">
-                    {Object.keys(COUNTRY_CONFIG).map((countryKey) => {
-                      const item = COUNTRY_CONFIG[countryKey];
-                      return (
-                        <label
-                          key={countryKey}
-                          className={`radio-card ${selectedCountry === countryKey ? 'selected' : ''}`}
-                          onClick={() => handleCountryChange(countryKey)}
-                        >
-                          <input
-                            type="radio"
-                            name="country"
-                            value={countryKey}
-                            checked={selectedCountry === countryKey}
-                            onChange={() => handleCountryChange(countryKey)}
-                          />
-                          <span className="radio-card-content">
-                            <span className="flag-icon">{item.flag}</span>
-                            <span className="country-name">{countryKey}</span>
-                            <span className="price-hint">{item.price}</span>
-                          </span>
-                        </label>
-                      );
-                    })}
+                  {/* Field 7: Form Consent / Privacy Checkbox */}
+                  <div className={`form-group ${formErrors.consent ? 'has-error' : ''}`} style={{ marginTop: '14px' }}>
+                    <label className="form-checkbox-label">
+                      <input
+                        type="checkbox"
+                        name="consent"
+                        checked={formData.consent}
+                        onChange={handleInputChange}
+                      />
+                      <span>
+                        I agree to receive workshop access details, reminders and related updates by email and/or WhatsApp. I understand I can opt out of non-essential communications.
+                      </span>
+                    </label>
+                    {formErrors.consent && <span className="error-msg">{formErrors.consent}</span>}
                   </div>
-                </div>
 
-                {/* Field 5: What feels most "stuck" for you right now? */}
-                <div className={`form-group ${formErrors.stuckArea ? 'has-error' : ''}`}>
-                  <label htmlFor="stuckArea" className="form-label">
-                    5. What feels most "stuck" for you right now? <span className="required">*</span>
-                  </label>
-                  <textarea
-                    id="stuckArea"
-                    name="stuckArea"
-                    rows={3}
-                    className="form-input form-textarea"
-                    placeholder="Tell us about what's feeling heavy or blocked..."
-                    value={formData.stuckArea}
-                    onChange={handleInputChange}
-                  />
-                  <span className="field-prompt">
-                    Prompt: "Your mornings, your mindset, or your goals — tell us in your own words."
-                  </span>
-                  {formErrors.stuckArea && <span className="error-msg">{formErrors.stuckArea}</span>}
-                </div>
-
-                {/* Field 6: Can you commit to joining live on [date]? */}
-                <div className="form-group">
-                  <label className="form-label">
-                    6. This works best live — can you commit to joining live on This Weekend? <span className="required">*</span>
-                  </label>
-                  <div className="radio-options-list">
-                    <label className="option-pill">
-                      <input
-                        type="radio"
-                        name="liveCommit"
-                        value="Yes, I'll be there live"
-                        checked={formData.liveCommit === "Yes, I'll be there live"}
-                        onChange={handleInputChange}
-                      />
-                      <span className="option-label"><strong>Yes</strong>, I'll be there live</span>
-                    </label>
-                    <label className="option-pill">
-                      <input
-                        type="radio"
-                        name="liveCommit"
-                        value="I can only catch a replay"
-                        checked={formData.liveCommit === 'I can only catch a replay'}
-                        onChange={handleInputChange}
-                      />
-                      <span className="option-label">I can only catch a replay</span>
-                    </label>
+                  {/* Submit Button */}
+                  <div className="form-submit-wrap">
+                    <button type="submit" disabled={isSubmitting} className="btn btn-hero-highlight btn-xl btn-block" id="formSubmitBtn">
+                      <span className="btn-text">{isSubmitting ? 'Reserving...' : 'RESERVE MY FREE SEAT →'}</span>
+                      <span className="btn-subtext">— 100% Free Live Online Workshop</span>
+                    </button>
+                    <p className="form-guarantee-note">
+                      🔒 Instant confirmation · Secure SSL connection · 100% Free
+                    </p>
                   </div>
-                  {formData.liveCommit === 'I can only catch a replay' && (
-                    <div className="replay-notice">
-                      ⚠️ <em>Friendly reminder: This workshop is designed 100% live without replays to ensure active coaching and deep breakthrough.</em>
-                    </div>
-                  )}
-                </div>
-
-                {/* Field 7: Open to going deeper afterward? */}
-                <div className="form-group">
-                  <label className="form-label">
-                    7. If this genuinely helps you, would you be open to going deeper afterward? <span className="required">*</span>
-                  </label>
-                  <div className="radio-options-list">
-                    <label className="option-pill">
-                      <input
-                        type="radio"
-                        name="goDeeper"
-                        value="Yes, if it's right for me"
-                        checked={formData.goDeeper === "Yes, if it's right for me"}
-                        onChange={handleInputChange}
-                      />
-                      <span className="option-label">Yes, if it's right for me</span>
-                    </label>
-                    <label className="option-pill">
-                      <input
-                        type="radio"
-                        name="goDeeper"
-                        value="Maybe, I'd want to see it first"
-                        checked={formData.goDeeper === "Maybe, I'd want to see it first"}
-                        onChange={handleInputChange}
-                      />
-                      <span className="option-label">Maybe, I'd want to see it first</span>
-                    </label>
-                    <label className="option-pill">
-                      <input
-                        type="radio"
-                        name="goDeeper"
-                        value="No, I'm just here for this session"
-                        checked={formData.goDeeper === "No, I'm just here for this session"}
-                        onChange={handleInputChange}
-                      />
-                      <span className="option-label">No, I'm just here for this session</span>
-                    </label>
-                  </div>
-                </div>
-
-                {/* Submit Button */}
-                <div className="form-submit-wrap">
-                  <button type="submit" disabled={isSubmitting} className="btn btn-hero-highlight btn-xl btn-block" id="formSubmitBtn">
-                    <span className="btn-text">{isSubmitting ? 'Reserving...' : 'Reserve My Free Spot →'}</span>
-                    <span className="btn-subtext">— 100% Free Live Access</span>
-                  </button>
-                  <p className="form-guarantee-note">
-                    🔒 Instant confirmation · Secure SSL connection · 100% Free
-                  </p>
-                </div>
-              </form>
+                </form>
+              </>
             ) : (
-              <div className="success-card">
-                <div className="success-animation">✓</div>
-                <h3 className="success-title">Registration Submitted!</h3>
-                <p className="success-subtitle">
-                  Thank you, <strong>{firstName}</strong>. Your spot has been reserved and stored in the database.
+              /* =========================================================================
+                   SECTION 11: THANK-YOU PAGE / CONFIRMATION
+                   ========================================================================= */
+              <div className="thank-you-container">
+                <div className="thank-you-badge">🎉 YOU’RE IN!</div>
+                <h2 className="thank-you-title">Your seat for the workshop is reserved.</h2>
+                <p className="thank-you-subtitle">
+                  <strong>Wake Before The World — Reset Your Mind. Realign Your Life.</strong>
                 </p>
+
+                {/* Event Schedule Box */}
+                <div className="thank-you-schedule-card">
+                  <div className="schedule-item">
+                    <span className="sched-icon">📅</span>
+                    <div>
+                      <strong>Session 1:</strong> Wednesday, 7 October 2026 • 8:30 PM IST
+                    </div>
+                  </div>
+                  <div className="schedule-item">
+                    <span className="sched-icon">📅</span>
+                    <div>
+                      <strong>Session 2:</strong> Thursday, 8 October 2026 • 8:30 PM IST
+                    </div>
+                  </div>
+                  <div className="schedule-subtext">
+                    🌍 <strong>Dubai:</strong> 7:00 PM • <strong>New York:</strong> 11:00 AM*<br />
+                    🎥 <em>Live Online • 60 Minutes Each • Free</em><br />
+                    <small>*U.S. time varies by location and daylight saving time.</small>
+                  </div>
+                </div>
+
+                {/* 3 Action Steps Box */}
+                <div className="thank-you-actions-card">
+                  <h3 className="actions-card-title">Do These 3 Things Now</h3>
+                  
+                  {/* Step 1 */}
+                  <div className="action-step-item">
+                    <div className="step-num">1️⃣</div>
+                    <div className="step-body">
+                      <h4>Add the event to your calendar</h4>
+                      <p>Lock both Session 1 and Session 2 into your schedule so you don't miss the live stream:</p>
+                      <div className="calendar-buttons-row">
+                        <a
+                          href={googleCalendarUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-outline-cal"
+                        >
+                          📅 Add to Google Calendar
+                        </a>
+                        <button
+                          type="button"
+                          onClick={downloadIcsFile}
+                          className="btn btn-outline-cal"
+                        >
+                          📥 Add to Outlook / Apple (.ics)
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="action-step-item">
+                    <div className="step-num">2️⃣</div>
+                    <div className="step-body">
+                      <h4>Save the workshop time in your time zone</h4>
+                      <div className="tz-chips">
+                        <span className="tz-chip">🇮🇳 India: <strong>8:30 PM IST</strong></span>
+                        <span className="tz-chip">🇦🇪 Dubai: <strong>7:00 PM</strong></span>
+                        <span className="tz-chip">🇺🇸 New York: <strong>11:00 AM*</strong></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="action-step-item highlight-step">
+                    <div className="step-num">3️⃣</div>
+                    <div className="step-body">
+                      <h4>Join the official WhatsApp workshop group</h4>
+                      <p>This is where we send live Zoom room access, reflection worksheets, and session updates.</p>
+                      <a
+                        href="https://chat.whatsapp.com/sample-group"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-whatsapp-join btn-block"
+                      >
+                        JOIN THE WORKSHOP WHATSAPP GROUP →
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Reflection Callout */}
+                <div className="thank-you-reflection-card">
+                  <div className="reflection-icon">💭</div>
+                  <div className="reflection-text">
+                    <strong>Before Day 1, take 5 minutes and reflect:</strong><br />
+                    <em>"What is one area of my life where I want greater clarity right now?"</em> Don’t solve it. Just notice it—and bring that question with you.
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -1038,15 +1205,15 @@ export default function App() {
                 <span className="brand-name">BRAHMAMUHURTA</span>
               </div>
               <p className="footer-motto">
-                Wake Before The World. Rewire Your Mind. Become The Person Your Life Is Waiting For.
+                Wake Before The World. Reset Your Mind. Realign Your Life.
               </p>
             </div>
 
             <div className="footer-meta-notes">
               <div className="badge-pill sm">Live 2-Day Founding Batch</div>
               <p className="footer-time-reminder">
-                <strong>Weekend Cohort:</strong> This Weekend Live — Saturday &amp; Sunday.<br />
-                Exact times confirmed on registration — reserve your spot now to get notified first.
+                <strong>Workshop Dates:</strong> 7 &amp; 8 October 2026 • 8:30 PM IST (Dubai 7:00 PM • New York 11:00 AM*).<br />
+                The Narayan Presence • Awaken • Align • Transform
               </p>
             </div>
           </div>
@@ -1061,18 +1228,14 @@ export default function App() {
 
           <div className="footer-bottom">
             <div className="copyright">
-              © {new Date().getFullYear()} Narayan Presence. All Rights Reserved.
+              © {new Date().getFullYear()} The Narayan Presence. All Rights Reserved.
             </div>
             <div className="footer-legal-links">
-              <button type="button" onClick={() => alert('Privacy Policy: Narayan Presence strictly protects your personal information and will never share or sell your data.')}>
+              <button type="button" onClick={() => alert('Privacy Policy: The Narayan Presence strictly protects your personal information and will never share or sell your data.')}>
                 Privacy Policy
               </button>
               <span className="legal-sep">|</span>
-              <button type="button" onClick={() => alert('Refund Policy: If you attend live and do not feel a shift, contact us within 48 hours for an unconditional refund.')}>
-                Refund Policy
-              </button>
-              <span className="legal-sep">|</span>
-              <button type="button" onClick={() => alert('Terms & Conditions: All content is proprietary to Narayan Presence and intended for personal transformational use.')}>
+              <button type="button" onClick={() => alert('Terms & Conditions: All content is proprietary to The Narayan Presence and intended for personal transformational use.')}>
                 Terms &amp; Conditions
               </button>
               <span className="legal-sep">|</span>
@@ -1096,10 +1259,10 @@ export default function App() {
         <div className="container floating-inner">
           <div className="floating-info">
             <span className="pulse-dot"></span>
-            <span className="floating-batch-text"><strong>Founding Batch:</strong> {seatsLeft} Seats Left</span>
+            <span className="floating-batch-text"><strong>Founding Batch:</strong> 7 &amp; 8 Oct 2026 • {seatsLeft} Seats Left</span>
           </div>
           <button onClick={() => scrollToSection('register')} className="btn btn-hero-highlight btn-sm">
-            Reserve My Spot →
+            RESERVE MY FREE SEAT →
           </button>
         </div>
       </div>
