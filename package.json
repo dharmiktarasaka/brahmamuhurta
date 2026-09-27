@@ -1,0 +1,30 @@
+{
+  "name": "narayan-method-workshop-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n \"SERVER,CLIENT,ADMIN\" -c \"cyan,blue,magenta\" \"npm run server\" \"npm run client\" \"npm run admin\"",
+    "server": "node server/server.js",
+    "client": "vite --config client/vite.config.js client",
+    "admin": "vite --config admin/vite.config.js admin",
+    "build:client": "vite build client",
+    "build:admin": "vite build admin",
+    "build": "vite build client && vite build admin",
+    "start": "node server/server.js"
+  },
+  "dependencies": {
+    "concurrently": "^10.0.5",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.4",
+    "express": "^5.2.1",
+    "lucide-react": "^1.16.0",
+    "mongoose": "^9.10.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.7"
+  }
+}
