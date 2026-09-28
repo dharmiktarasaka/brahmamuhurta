@@ -50,21 +50,21 @@ const COUNTRY_CONFIG = {
 
 const ROLE_OPTIONS = [
   'Working Professional',
-  'Entrepreneur / Business Owner',
-  'Founder-CEO',
-  'Student / Seeker',
+  'Student',
   'Parent',
   'Homemaker',
+  'Entrepreneur',
+  'Business Owner',
+  'Founder/CEO',
   'Service Provider',
-  'Coach-Consultant',
-  'Retired-Older Adult',
+  'Coach/Consultant',
+  'Retired/Older Adult',
   'Other'
 ];
 
 export default function App() {
   const [selectedCountry, setSelectedCountry] = useState('India');
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
-  const [showFloatingBar, setShowFloatingBar] = useState(false);
   const [seatsLeft, setSeatsLeft] = useState(6);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -79,19 +79,6 @@ export default function App() {
   });
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  // Handle Scroll for Floating Bar
-  useEffect(() => {
-    const handleScroll = () => {
-      const hero = document.getElementById('hero');
-      if (hero) {
-        const bottom = hero.getBoundingClientRect().bottom;
-        setShowFloatingBar(bottom < 0);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -128,7 +115,7 @@ export default function App() {
     }
 
     if (!formData.consent) {
-      errors.consent = 'Please agree to receive workshop access updates to continue.';
+      errors.consent = 'Please agree to receive workshop access details to continue.';
     }
 
     if (Object.keys(errors).length > 0) {
@@ -164,8 +151,6 @@ export default function App() {
     }
   };
 
-  const firstName = formData.fullName.trim().split(' ')[0] || 'Friend';
-
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
@@ -173,14 +158,14 @@ export default function App() {
     }
   };
 
-  // Google Calendar Event Link (7 Oct 2026, 8:30 PM IST = 15:00 UTC)
+  // Google Calendar Event Link
   const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-    'Wake Before The World — Reset Your Mind. Realign Your Life (Day 1 & 2)'
+    'Brahma Muhurta Awakening — Reset Your Mind. Realign Your Life (Day 1 & 2)'
   )}&dates=20261007T150000Z/20261007T160000Z&details=${encodeURIComponent(
     'The Narayan Presence 2-Day Live Workshop with Ranu Patel.\n\nSession 1: Wednesday, 7 October 2026 • 8:30 PM IST\nSession 2: Thursday, 8 October 2026 • 8:30 PM IST\n\nDubai: 7:00 PM • New York: 11:00 AM EDT\nZoom links sent via WhatsApp.'
   )}&location=${encodeURIComponent('Live Online Zoom')}`;
 
-  // Download .ics file for Outlook / Apple Calendar
+  // Download .ics file
   const downloadIcsFile = () => {
     const icsContent = [
       'BEGIN:VCALENDAR',
@@ -189,7 +174,7 @@ export default function App() {
       'CALSCALE:GREGORIAN',
       'METHOD:PUBLISH',
       'BEGIN:VEVENT',
-      'SUMMARY:Wake Before The World — Reset Your Mind. Realign Your Life (Session 1)',
+      'SUMMARY:Brahma Muhurta Awakening (Session 1)',
       'DESCRIPTION:Day 1 of 2-Day Live Workshop with Ranu Patel. Live on Zoom.',
       'DTSTART:20261007T150000Z',
       'DTEND:20261007T160000Z',
@@ -197,7 +182,7 @@ export default function App() {
       'STATUS:CONFIRMED',
       'END:VEVENT',
       'BEGIN:VEVENT',
-      'SUMMARY:Wake Before The World — Reset Your Mind. Realign Your Life (Session 2)',
+      'SUMMARY:Brahma Muhurta Awakening (Session 2)',
       'DESCRIPTION:Day 2 of 2-Day Live Workshop with Ranu Patel. Live on Zoom.',
       'DTSTART:20261008T150000Z',
       'DTEND:20261008T160000Z',
@@ -218,179 +203,166 @@ export default function App() {
 
   return (
     <div className="landing-app">
-      {/* Background Decorative Spotlight Glow */}
+      {/* Background Ambient Atmosphere Glow */}
       <div className="spotlight-glow" aria-hidden="true"></div>
 
-      {/* Top Header */}
+      {/* =========================================================================
+           TOP NAVIGATION (Minimalist Artemis Pill Style)
+           ========================================================================= */}
       <header className="site-header">
         <div className="container header-inner">
           <a href="#hero" className="navbar-brand">
             <img src={logoImg} alt="Brahmamuhurta Logo" className="brand-logo-img" />
+            <div className="brand-title-wrap">
+              <span className="brand-name">BRAHMAMUHURTA</span>
+              <span className="brand-subline">The Narayan Presence</span>
+            </div>
           </a>
 
-          <button onClick={() => scrollToSection('register')} className="btn btn-sm btn-hero-highlight">
-            RESERVE MY FREE SEAT →
+          <button onClick={() => scrollToSection('register')} className="btn-header-action">
+            RESERVE FREE SEAT ↗
           </button>
         </div>
       </header>
 
 
       {/* =========================================================================
-           SECTION 1: HERO
+           SECTION 1: HERO (Artemis Editorial Aesthetic)
            ========================================================================= */}
-      <section id="hero" className="hero-section hero-clean-layout">
-        <div className="container hero-clean-grid">
+      <section id="hero" className="hero-editorial-section">
+        <div className="container hero-editorial-grid">
           
-          {/* Left Column: Clean Typography & CTA */}
-          <div className="hero-clean-left">
+          {/* Left Column: Clean Editorial Typography & Showcase */}
+          <div className="hero-editorial-left">
             
-            {/* Eyebrow Label */}
-            <div className="hero-eyebrow-tag">
-              FREE LIVE ONLINE WORKSHOP FOR PERSONAL GROWTH &amp; SELF-AWARENESS
+            {/* Tag Pill */}
+            <div className="hero-tag-pill">
+              <span className="pill-dot"></span>
+              <span>BRAHMA MUHURTA AWAKENING</span>
             </div>
 
-            {/* Bold Headline */}
-            <h1 className="hero-clean-title">
-              Wake Before The World.<br />
-              <span className="hero-highlight">Reset Your Mind. Realign Your Life.</span>
+            {/* Editorial Title */}
+            <h1 className="hero-editorial-title">
+              <em>Wake Before The World.</em>
+              <span className="strong-sans">Reset Your Mind.</span>
+              <em>Realign Your Life.</em>
             </h1>
 
-            {/* Coach Subtitle */}
-            <div className="hero-coach-line">
-              <span className="coach-highlight-name">Ranu Patel</span>
-              <span className="coach-sep">—</span>
-              <span className="coach-role">Co-Founder | Life Transformation Coach &amp; Consultant</span>
+            {/* Supporting Lines */}
+            <div className="hero-supporting-badge">
+              A Live 2-Day Personal Growth &amp; Self-Awareness Workshop
+            </div>
+            <div className="hero-host-line">
+              Hosted by <strong>Ranu Patel</strong> (Co-Founder | Life Transformation Coach &amp; Consultant)
             </div>
 
-            {/* Subheadline description */}
-            <p className="hero-clean-desc">
+            {/* Description */}
+            <p className="hero-editorial-desc">
               Start your day with greater clarity, intention and self-awareness—before the noise of the world takes over.
             </p>
 
-            {/* Ultra-Attractive Premium Event Schedule Card */}
-            <div className="hero-schedule-showcase">
-              <div className="schedule-showcase-header">
-                <div className="showcase-live-pill">
-                  <span className="live-pulsing-dot"></span>
+            {/* Refined Schedule Showcase Card */}
+            <div className="schedule-showcase-artemis">
+              <div className="showcase-header-row">
+                <div className="live-pill-badge">
+                  <span className="pulse-dot-live"></span>
                   <span>2-DAY LIVE ONLINE COHORT</span>
                 </div>
-                <span className="showcase-free-badge">100% FREE ACCESS</span>
+                <span className="free-pill-badge">100% FREE ACCESS</span>
               </div>
 
-              {/* 2-Day Side-by-Side Session Cards */}
-              <div className="showcase-sessions-grid">
+              {/* 2-Day Side-by-Side Dates */}
+              <div className="showcase-dates-grid">
                 {/* Session 1 */}
-                <div className="showcase-session-item">
-                  <div className="session-date-col">
-                    <span className="session-day-label">DAY 1</span>
-                    <span className="session-date-num">07</span>
-                    <span className="session-month-label">OCT 2026</span>
+                <div className="session-box">
+                  <div className="date-stamp">
+                    <span className="stamp-day">DAY 1</span>
+                    <span className="stamp-num">07</span>
+                    <span className="stamp-month">OCT 2026</span>
                   </div>
-                  <div className="session-info-col">
-                    <span className="session-weekday">Wednesday</span>
-                    <div className="session-time-highlight">
-                      <span className="time-clock-icon">🕣</span> 8:30 PM <span className="tz-label">IST</span>
-                    </div>
-                    <span className="session-topic-tag">Awareness &amp; Reset</span>
+                  <div className="session-meta">
+                    <span className="session-day-name">Wednesday</span>
+                    <div className="session-clock-time">8:30 PM <small>IST</small></div>
+                    <span className="session-tag-sm">Awareness &amp; Reset</span>
                   </div>
                 </div>
 
-                {/* Session Divider */}
-                <div className="showcase-session-sep">
-                  <span>+</span>
-                </div>
+                <div className="session-plus-sep">+</div>
 
                 {/* Session 2 */}
-                <div className="showcase-session-item">
-                  <div className="session-date-col highlight">
-                    <span className="session-day-label">DAY 2</span>
-                    <span className="session-date-num">08</span>
-                    <span className="session-month-label">OCT 2026</span>
+                <div className="session-box">
+                  <div className="date-stamp accent">
+                    <span className="stamp-day">DAY 2</span>
+                    <span className="stamp-num">08</span>
+                    <span className="stamp-month">OCT 2026</span>
                   </div>
-                  <div className="session-info-col">
-                    <span className="session-weekday">Thursday</span>
-                    <div className="session-time-highlight">
-                      <span className="time-clock-icon">🕣</span> 8:30 PM <span className="tz-label">IST</span>
-                    </div>
-                    <span className="session-topic-tag">Practice &amp; Realign</span>
+                  <div className="session-meta">
+                    <span className="session-day-name">Thursday</span>
+                    <div className="session-clock-time">8:30 PM <small>IST</small></div>
+                    <span className="session-tag-sm">Practice &amp; Realign</span>
                   </div>
                 </div>
               </div>
 
-              {/* Global Timezones Interactive Bar */}
-              <div className="showcase-world-timezones">
-                <div className="tz-bar-label">
-                  <span className="globe-icon">🌍</span> Global Time Conversion:
-                </div>
-                <div className="tz-badges-wrap">
-                  <div className="tz-showcase-pill primary">
-                    <span className="flag">🇮🇳</span>
-                    <span className="tz-name">India</span>
-                    <strong className="tz-time">8:30 PM IST</strong>
+              {/* World Timezone Strip */}
+              <div className="world-clock-strip">
+                <div className="clock-strip-label">🌍 Global Time Conversion:</div>
+                <div className="clock-pills-row">
+                  <div className="tz-pill-item highlight">
+                    <span>🇮🇳</span> <span>India:</span> <strong>8:30 PM IST</strong>
                   </div>
-                  <div className="tz-showcase-pill">
-                    <span className="flag">🇦🇪</span>
-                    <span className="tz-name">Dubai</span>
-                    <strong className="tz-time">7:00 PM</strong>
+                  <div className="tz-pill-item">
+                    <span>🇦🇪</span> <span>Dubai:</span> <strong>7:00 PM</strong>
                   </div>
-                  <div className="tz-showcase-pill">
-                    <span className="flag">🇺🇸</span>
-                    <span className="tz-name">New York</span>
-                    <strong className="tz-time">11:00 AM EDT*</strong>
+                  <div className="tz-pill-item">
+                    <span>🇺🇸</span> <span>New York:</span> <strong>11:00 AM EDT*</strong>
                   </div>
                 </div>
-                <div className="tz-disclaimer-note">
-                  *60 minutes live per session. U.S. time varies by location and daylight saving.
+                <div className="tz-note-text">
+                  *60 mins live per session. U.S. time varies by daylight saving.
                 </div>
               </div>
             </div>
 
-            {/* Compact Info Badges Row */}
-            <div className="hero-clean-chips">
-              <span className="clean-chip">
-                <span className="chip-icon">🎥</span> 2 Live Online Sessions (60 Mins Each)
-              </span>
-              <span className="clean-chip">
-                <span className="chip-icon">🌐</span> English with Hindi support
-              </span>
-              <span className="clean-chip">
-                <span className="chip-icon">🎁</span> 100% Free Workshop
-              </span>
+            {/* Info Chips */}
+            <div className="hero-chips-wrap">
+              <span className="info-chip-pill">🎥 2 Live Online Sessions (60 Mins Each)</span>
+              <span className="info-chip-pill">🌐 English with Hindi support</span>
+              <span className="info-chip-pill">🎁 100% Free Workshop</span>
             </div>
 
-            {/* Big Single Bold CTA Button */}
-            <div className="hero-clean-cta-wrap">
+            {/* Primary CTA Button */}
+            <div className="hero-cta-button-wrap">
               <button 
                 onClick={() => scrollToSection('register')} 
-                className="btn btn-hero-highlight"
+                className="btn-primary-orange"
                 id="hero-primary-cta"
               >
-                RESERVE MY FREE SEAT →
+                RESERVE MY FREE SEAT ↗
               </button>
 
-              <div className="hero-clean-trust">
+              <div className="hero-trust-subtext">
                 <span>🌅 100% Free Live Online</span>
-                <span className="trust-dot">•</span>
+                <span>•</span>
                 <span>🔒 Small Founding Batch (20 Capped Seats)</span>
               </div>
             </div>
 
           </div>
 
-          {/* Right Column: Spotlight Portrait of Coach */}
-          <div className="hero-clean-right">
-            <div className="coach-spotlight-wrapper">
-              <div className="coach-halo-glow"></div>
+          {/* Right Column: Coach Spotlight Portrait */}
+          <div className="hero-editorial-right">
+            <div className="coach-artemis-frame">
+              <div className="coach-aura-glow"></div>
               <img 
                 src={coachImg} 
                 alt="Ranu Patel - Co-Founder | Life Transformation Coach & Consultant" 
-                className="coach-spotlight-img"
+                className="coach-artemis-photo"
               />
               
-              {/* Floating Batch Pill */}
-              <div className="floating-batch-pill">
-                <span className="live-status-dot"></span>
-                <span className="batch-pill-text">Founding Batch · <strong>{seatsLeft} Seats Remaining</strong></span>
+              <div className="floating-coach-badge">
+                <span className="batch-dot-live"></span>
+                <span>Founding Batch · <strong>{seatsLeft} Seats Remaining</strong></span>
               </div>
             </div>
           </div>
@@ -400,62 +372,70 @@ export default function App() {
 
 
       {/* =========================================================================
-           SECTION 2: "THIS IS FOR YOU IF..."
+           SECTION 2: "THIS WORKSHOP IS FOR YOU IF..." (Stone Card Grid)
            ========================================================================= */}
-      <section id="for-you" className="section-padding for-you-section">
+      <section id="for-you" className="section-padding">
         <div className="container">
           
-          <div className="section-header text-center">
-            <span className="badge-pill">Self-Reflection Checklist</span>
-            <h2 className="section-title">This Is For You If...</h2>
-            <p className="section-subtitle">Take a slow breath and see if any of these resonate with your daily experience:</p>
+          <div className="section-header-artemis text-center">
+            <span className="section-tag-mono">[ SELF-REFLECTION CHECKLIST ]</span>
+            <h2 className="section-heading-artemis">
+              This Workshop Is <em>For You If…</em>
+            </h2>
+            <p className="section-subtext-artemis max-w-750">
+              Take a slow breath and see if any of these resonate with your daily experience:
+            </p>
           </div>
 
-          <div className="checklist-grid">
-            <div className="check-card">
-              <div className="check-icon-wrap">😴</div>
-              <div className="check-content">
-                <p>You wake up tired — <strong>even after a full night's sleep</strong></p>
+          <div className="artemis-card-grid">
+            <div className="artemis-stone-card">
+              <div className="card-icon-artemis">💡</div>
+              <div className="card-text-artemis">
+                You often <span className="marker-highlight">overthink</span> and want greater clarity.
               </div>
             </div>
 
-            <div className="check-card">
-              <div className="check-icon-wrap">🌀</div>
-              <div className="check-content">
-                <p>Your mind is loud <strong>before your feet even hit the floor</strong></p>
+            <div className="artemis-stone-card">
+              <div className="card-icon-artemis">🌀</div>
+              <div className="card-text-artemis">
+                Your mind <span className="marker-highlight">feels busy</span> even when life looks fine from the outside.
               </div>
             </div>
 
-            <div className="check-card">
-              <div className="check-icon-wrap">💭</div>
-              <div className="check-content">
-                <p>You've tried routines, journals, and manifestation videos — <strong>and still feel stuck</strong></p>
+            <div className="artemis-stone-card">
+              <div className="card-icon-artemis">🔍</div>
+              <div className="card-text-artemis">
+                You want to understand <span className="marker-highlight">yourself, your thoughts and your patterns</span> better.
               </div>
             </div>
 
-            <div className="check-card">
-              <div className="check-icon-wrap">💔</div>
-              <div className="check-content">
-                <p>You feel disconnected from the version of yourself <strong>you know you're capable of being</strong></p>
+            <div className="artemis-stone-card">
+              <div className="card-icon-artemis">🎯</div>
+              <div className="card-text-artemis">
+                You want to become <span className="marker-highlight">more consistent</span> with habits and daily practices.
               </div>
             </div>
 
-            <div className="check-card">
-              <div className="check-icon-wrap">⏳</div>
-              <div className="check-content">
-                <p>You keep waiting for <strong>"the right time"</strong> to start changing your life</p>
+            <div className="artemis-stone-card">
+              <div className="card-icon-artemis">🌅</div>
+              <div className="card-text-artemis">
+                You want to start your day with <span className="marker-highlight">greater intention</span> instead of reacting to everything around you.
+              </div>
+            </div>
+
+            <div className="artemis-stone-card">
+              <div className="card-icon-artemis">🌱</div>
+              <div className="card-text-artemis">
+                You are ready to <span className="marker-highlight">pause, reflect, learn and grow</span>.
               </div>
             </div>
           </div>
 
-          {/* Core Epiphany Quote / Punchline */}
-          <div className="punchline-banner">
-            <div className="punchline-inner">
-              <div className="quote-mark">“</div>
-              <p className="punchline-text">
-                You don't need a new life. You need a new morning — and a new way of thinking about what's possible for you.
-              </p>
-            </div>
+          {/* Epiphany Banner */}
+          <div className="editorial-quote-banner">
+            <p className="quote-serif-text">
+              “Awareness creates the space for conscious choice. Start your day with intention before the noise of the world takes over.”
+            </p>
           </div>
 
         </div>
@@ -465,90 +445,88 @@ export default function App() {
       {/* =========================================================================
            SECTION 3: THE NARAYAN METHOD — 4 SHIFTS TOWARD CONSCIOUS LIVING
            ========================================================================= */}
-      <section id="framework" className="section-padding framework-section">
+      <section id="framework" className="section-padding" style={{ background: '#F5F3EE' }}>
         <div className="container">
           
-          <div className="section-header text-center">
-            <span className="badge-pill">The Core Framework</span>
-            <h2 className="section-title">The Narayan Method — 4 Shifts Toward Conscious Living</h2>
-            <p className="section-subtitle max-w-750">
-              A simple, teachable framework that connects awareness with everyday action.
+          <div className="section-header-artemis text-center">
+            <span className="section-tag-mono">[ THE CORE FRAMEWORK ]</span>
+            <h2 className="section-heading-artemis">
+              The Narayan Method — <em>4 Shifts Toward Conscious Living</em>
+            </h2>
+            <p className="section-subtext-artemis max-w-750">
+              A simple, practical framework that connects awareness with everyday action.
             </p>
           </div>
 
-          <div className="shifts-container">
+          <div className="shifts-artemis-grid">
             {/* Shift 1 */}
-            <div className="shift-card">
-              <div className="shift-number-col">
-                <span className="shift-num">01</span>
-                <div className="shift-line"></div>
-              </div>
-              <div className="shift-body">
-                <div className="shift-tag">STEP 1 · PAUSE</div>
-                <h3 className="shift-heading">Pause — Create Space to Observe Yourself</h3>
-                <p className="shift-desc">
-                  Learn to step out of autopilot before stress finds you. Meet morning stillness and build a calm nervous system buffer before the demands of the day begin.
+            <div className="shift-artemis-card">
+              <div>
+                <div className="shift-header-top">
+                  <span className="shift-num-serif">01</span>
+                  <span className="shift-tag-pill">Step 1</span>
+                </div>
+                <h3 className="shift-title-artemis">Pause</h3>
+                <p className="shift-desc-artemis">
+                  Step out of autopilot and create space to observe yourself.
                 </p>
-                <div className="shift-benefit-tag">🌿 Stillness before stress finds you</div>
               </div>
+              <div className="shift-benefit-chip">🌿 Stillness before stress finds you</div>
             </div>
 
             {/* Shift 2 */}
-            <div className="shift-card">
-              <div className="shift-number-col">
-                <span className="shift-num">02</span>
-                <div className="shift-line"></div>
-              </div>
-              <div className="shift-body">
-                <div className="shift-tag">STEP 2 · NOTICE</div>
-                <h3 className="shift-heading">Notice — Understand Thoughts, Emotions &amp; Patterns</h3>
-                <p className="shift-desc">
-                  Identify unconscious mental loops and limiting beliefs quietly running your decisions. Gain the clarity to observe your thoughts without getting trapped by them.
+            <div className="shift-artemis-card">
+              <div>
+                <div className="shift-header-top">
+                  <span className="shift-num-serif">02</span>
+                  <span className="shift-tag-pill">Step 2</span>
+                </div>
+                <h3 className="shift-title-artemis">Notice</h3>
+                <p className="shift-desc-artemis">
+                  Understand thoughts, emotions, habits and patterns.
                 </p>
-                <div className="shift-benefit-tag">🧠 Self-awareness over unconscious programming</div>
               </div>
+              <div className="shift-benefit-chip">🧠 Self-awareness over unconscious routines</div>
             </div>
 
             {/* Shift 3 */}
-            <div className="shift-card">
-              <div className="shift-number-col">
-                <span className="shift-num">03</span>
-                <div className="shift-line"></div>
-              </div>
-              <div className="shift-body">
-                <div className="shift-tag">STEP 3 · REALIGN</div>
-                <h3 className="shift-heading">Realign — Reconnect Actions With What Matters</h3>
-                <p className="shift-desc">
-                  Move from scattered wishing to grounded intention. Realign your daily focus with your true values and clear priorities — without toxic positivity or vague advice.
+            <div className="shift-artemis-card">
+              <div>
+                <div className="shift-header-top">
+                  <span className="shift-num-serif">03</span>
+                  <span className="shift-tag-pill">Step 3</span>
+                </div>
+                <h3 className="shift-title-artemis">Realign</h3>
+                <p className="shift-desc-artemis">
+                  Reconnect your actions with what matters to you.
                 </p>
-                <div className="shift-benefit-tag">🎯 Grounded intention and genuine priority alignment</div>
               </div>
+              <div className="shift-benefit-chip">🎯 Grounded intention and priority alignment</div>
             </div>
 
             {/* Shift 4 */}
-            <div className="shift-card">
-              <div className="shift-number-col">
-                <span className="shift-num">04</span>
-                <div className="shift-line"></div>
-              </div>
-              <div className="shift-body">
-                <div className="shift-tag">STEP 4 · PRACTICE</div>
-                <h3 className="shift-heading">Practice — Turn Awareness Into Small Daily Actions</h3>
-                <p className="shift-desc">
-                  Awareness without action fades fast. Learn how to transform morning reflections into small, repeatable daily habits that carry momentum throughout your entire day.
+            <div className="shift-artemis-card">
+              <div>
+                <div className="shift-header-top">
+                  <span className="shift-num-serif">04</span>
+                  <span className="shift-tag-pill">Step 4</span>
+                </div>
+                <h3 className="shift-title-artemis">Practice</h3>
+                <p className="shift-desc-artemis">
+                  Turn awareness into small, consistent daily actions.
                 </p>
-                <div className="shift-benefit-tag">⚡ Small, repeatable daily actions that last</div>
               </div>
+              <div className="shift-benefit-chip">⚡ Repeatable daily practices that last</div>
             </div>
           </div>
 
-          {/* Synthesis Callout */}
-          <div className="framework-synthesis">
-            <div className="synthesis-icon">✨</div>
-            <p className="synthesis-text">
-              <strong>LEARN → PRACTICE → EXPERIENCE → REFLECT → IMPROVE → SHARE</strong><br />
-              A sequential method to quiet mental noise, understand your patterns, and build intentional daily habits.
-            </p>
+          <div className="editorial-quote-banner text-center" style={{ background: '#FFFFFF' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--accent-orange)', fontWeight: 700, letterSpacing: '0.08em' }}>
+              SEQUENTIAL FRAMEWORK:
+            </span>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', fontStyle: 'italic', marginTop: '6px', color: 'var(--text-primary)' }}>
+              Learn → Practice → Experience → Reflect → Improve → Share
+            </div>
           </div>
 
         </div>
@@ -556,70 +534,74 @@ export default function App() {
 
 
       {/* =========================================================================
-           SECTION 4: WHAT YOU'LL WALK AWAY WITH
+           SECTION 4: WHAT YOU’LL WALK AWAY WITH
            ========================================================================= */}
-      <section id="outcomes" className="section-padding outcomes-section">
+      <section id="outcomes" className="section-padding">
         <div className="container">
           
-          <div className="section-header text-center">
-            <span className="badge-pill">Tangible Outcomes</span>
-            <h2 className="section-title">What You'll Walk Away With</h2>
-            <p className="section-subtitle">Practical, grounded takeaways and frameworks you can use immediately:</p>
+          <div className="section-header-artemis text-center">
+            <span className="section-tag-mono">[ TANGIBLE OUTCOMES ]</span>
+            <h2 className="section-heading-artemis">
+              What You’ll <em>Walk Away With</em>
+            </h2>
+            <p className="section-subtext-artemis max-w-750">
+              Practical, grounded takeaways and frameworks you can use immediately:
+            </p>
           </div>
 
-          <div className="outcomes-grid">
-            <div className="outcome-card">
-              <div className="outcome-bullet-badge">01</div>
-              <div className="outcome-content">
-                <h4>Thought &amp; Habit Clarity</h4>
-                <p>A clearer understanding of your thoughts, habits and unconscious daily patterns.</p>
+          <div className="outcomes-artemis-grid">
+            <div className="outcome-artemis-card">
+              <div className="outcome-num-badge">01</div>
+              <div className="outcome-body">
+                <h4>Patterns &amp; Priorities Clarity</h4>
+                <p>A clearer understanding of your current patterns and priorities.</p>
               </div>
             </div>
 
-            <div className="outcome-card">
-              <div className="outcome-bullet-badge">02</div>
-              <div className="outcome-content">
+            <div className="outcome-artemis-card">
+              <div className="outcome-num-badge">02</div>
+              <div className="outcome-body">
                 <h4>Self-Awareness Framework</h4>
-                <p>A practical self-awareness framework you can easily use on your own after the workshop.</p>
+                <p>A practical self-awareness framework you can use beyond the workshop.</p>
               </div>
             </div>
 
-            <div className="outcome-card">
-              <div className="outcome-bullet-badge">03</div>
-              <div className="outcome-content">
+            <div className="outcome-artemis-card">
+              <div className="outcome-num-badge">03</div>
+              <div className="outcome-body">
                 <h4>Mindfulness &amp; Reflection</h4>
-                <p>Simple mindfulness and reflection practices to explore without complex rules or strain.</p>
+                <p>Simple mindfulness and reflection practices for everyday life.</p>
               </div>
             </div>
 
-            <div className="outcome-card">
-              <div className="outcome-bullet-badge">04</div>
-              <div className="outcome-content">
-                <h4>Priority &amp; Intention Clarity</h4>
-                <p>Greater clarity around your true priorities and how to live with daily intention.</p>
+            <div className="outcome-artemis-card">
+              <div className="outcome-num-badge">04</div>
+              <div className="outcome-body">
+                <h4>Clarity on What Matters</h4>
+                <p>Greater clarity around what matters to you right now.</p>
               </div>
             </div>
 
-            <div className="outcome-card">
-              <div className="outcome-bullet-badge">05</div>
-              <div className="outcome-content">
-                <h4>Repeatable Action System</h4>
-                <p>A framework for turning insights and learning into small, repeatable everyday actions.</p>
+            <div className="outcome-artemis-card">
+              <div className="outcome-num-badge">05</div>
+              <div className="outcome-body">
+                <h4>Consistent Action System</h4>
+                <p>A practical way to turn awareness into consistent action.</p>
               </div>
             </div>
 
-            <div className="outcome-card">
-              <div className="outcome-bullet-badge">06</div>
-              <div className="outcome-content">
-                <h4>Conscious Morning Approach</h4>
-                <p>A more conscious, peaceful approach to beginning your day before world distractions start.</p>
+            <div className="outcome-artemis-card">
+              <div className="outcome-num-badge">06</div>
+              <div className="outcome-body">
+                <h4>Intentional Morning Routine</h4>
+                <p>A more intentional way to begin your day.</p>
               </div>
             </div>
           </div>
 
           <div className="text-center mt-40">
-            <button onClick={() => scrollToSection('register')} className="btn btn-hero-highlight btn-md">
-              RESERVE MY FREE SEAT →
+            <button onClick={() => scrollToSection('register')} className="btn-primary-orange">
+              RESERVE MY FREE SEAT ↗
             </button>
           </div>
 
@@ -628,54 +610,61 @@ export default function App() {
 
 
       {/* =========================================================================
-           SECTION 5: FOUNDER STORY — WHY I CREATED THE NARAYAN PRESENCE
+           SECTION 5: FOUNDER SECTION (Dark Charcoal Artemis Container)
            ========================================================================= */}
-      <section id="coach" className="section-padding coach-section">
+      <section id="coach" className="section-padding" style={{ paddingTop: 0 }}>
         <div className="container">
           
-          <div className="coach-container">
-            <div className="coach-image-column">
-              <div className="coach-photo-frame">
-                <img src={coachImg} alt="Ranu Patel - Co-Founder" className="coach-main-photo" />
-                <div className="coach-experience-badge">
-                  <span className="exp-years">15+</span>
-                  <span className="exp-label">Years Corporate &amp; Growth Experience</span>
+          <div className="founder-dark-container">
+            <div className="founder-grid-layout">
+              
+              {/* Photo Frame */}
+              <div className="founder-photo-col">
+                <div className="founder-photo-frame-dark">
+                  <img src={coachImg} alt="Ranu Patel - Co-Founder" className="founder-img-dark" />
+                  <div className="founder-experience-tag">
+                    ✦ 15+ Years Growth &amp; Mentorship
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="coach-bio-column">
-              <span className="badge-pill">Why I Created The Narayan Presence</span>
-              <h2 className="coach-name-heading">Ranu Patel</h2>
-              <p className="coach-title-subtitle">Co-Founder | Life Transformation Coach &amp; Consultant</p>
-              
-              <div className="coach-story-card">
-                <p className="coach-quote-para">
-                  For years, I focused on helping businesses grow—websites, digital strategy, SEO, branding, lead generation and technology.
+              {/* Bio Content */}
+              <div className="founder-content-col">
+                <div className="founder-tag-pill">
+                  [ WHY I CREATED THE NARAYAN PRESENCE ]
+                </div>
+                <h2 className="founder-heading-dark">Ranu Patel</h2>
+                <div className="founder-role-dark">
+                  Co-Founder | Life Transformation Coach &amp; Consultant
+                </div>
+
+                <p className="founder-story-para">
+                  For years, I focused on helping businesses grow. But eventually I started asking myself: <em>What about the person behind the work?</em>
                 </p>
-                <p className="coach-quote-para">
-                  But eventually I started asking myself: <em>What about the person behind the work?</em>
+                <p className="founder-story-para">
+                  As a professional, parent, entrepreneur and lifelong learner, I began looking more deeply at my own thoughts, habits, reactions and patterns. I learned from experienced teachers and experts, but more importantly, I started applying what I learned to my own life.
                 </p>
-                <p className="coach-quote-para">
-                  The professional dealing with pressure. The parent balancing responsibilities. The entrepreneur carrying endless decisions. The person who spends so much time caring for others that they forget to pause for themselves.
-                </p>
-                <p className="coach-quote-para">
-                  I began learning from experienced teachers and experts across personal growth, mindfulness, mindset, self-awareness and reflective practices.
-                </p>
-                
-                <div className="coach-principle-box" style={{ background: '#FFFDF9', border: '1px solid #FDE68A', padding: '14px 18px', borderRadius: '10px', margin: '16px 0' }}>
-                  <strong style={{ color: '#B45309', fontSize: '0.88rem', letterSpacing: '0.04em' }}>MY GUIDING PRINCIPLE:</strong>
-                  <div style={{ color: '#0F172A', fontWeight: 800, fontSize: '1rem', marginTop: '4px' }}>
+
+                <div className="philosophy-strip-dark">
+                  <div className="philosophy-label-dark">Core Philosophy:</div>
+                  <div className="philosophy-flow-dark">
                     LEARN → PRACTICE → EXPERIENCE → REFLECT → IMPROVE → SHARE
                   </div>
                 </div>
 
-                <p className="coach-quote-para">
-                  I started applying what I learned to my own life first. That personal journey became the foundation of <strong>The Narayan Presence</strong>.
+                <p className="founder-story-para">
+                  The Narayan Presence grew from that journey—not from the idea that I have all the answers, but from the belief that learning becomes more meaningful when we practice, reflect and share what we experience.
                 </p>
-                <p className="coach-quote-para" style={{ color: '#D97706', fontWeight: 700 }}>
-                  This workshop is an invitation to begin that journey for yourself.
-                </p>
+
+                <div className="founder-signature-dark">
+                  Awaken • Align • Transform
+                </div>
+
+                <div style={{ marginTop: '20px' }}>
+                  <button onClick={() => scrollToSection('register')} className="btn-primary-orange">
+                    JOIN RANU IN THE FOUNDING BATCH ↗
+                  </button>
+                </div>
               </div>
 
             </div>
@@ -688,61 +677,61 @@ export default function App() {
       {/* =========================================================================
            SECTION 6: FOUNDING BATCH — SPECIAL INCLUSIONS
            ========================================================================= */}
-      <section id="bonuses" className="section-padding bonuses-section">
+      <section id="bonuses" className="section-padding" style={{ background: '#F5F3EE' }}>
         <div className="container">
           
-          <div className="section-header text-center">
-            <span className="badge-pill">Founding Batch Benefits</span>
-            <h2 className="section-title">FOUNDING BATCH — SPECIAL INCLUSIONS</h2>
-            <p className="section-subtitle">Exclusive materials and frameworks provided to live attendees in this cohort:</p>
+          <div className="section-header-artemis text-center">
+            <span className="section-tag-mono">[ FOUNDING BATCH BENEFITS ]</span>
+            <h2 className="section-heading-artemis">
+              Founding Batch — <em>Special Inclusions</em>
+            </h2>
+            <p className="section-subtext-artemis max-w-750">
+              Delivered live to all registered attendees in this cohort:
+            </p>
           </div>
 
-          <div className="bonuses-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}>
-            {/* Inclusion 1 */}
-            <div className="bonus-card">
-              <div className="bonus-header">
-                <span className="bonus-tag">INCLUSION #1</span>
-                <span className="bonus-icon">📝</span>
+          <div className="inclusions-grid-artemis">
+            <div className="inclusion-stone-card">
+              <div className="inclusion-header-row">
+                <span className="inclusion-tag">INCLUSION #1</span>
+                <span className="inclusion-icon">🎥</span>
               </div>
-              <h3 className="bonus-title">Guided Reflection Worksheet</h3>
-              <p className="bonus-desc">
-                Structured reflection exercises and prompts to help you identify current habits, clarify personal priorities, and track your daily mindset shifts.
+              <h3 className="inclusion-title">Live 2-Day Workshop Access</h3>
+              <p className="inclusion-desc">
+                Two consecutive 60-minute live interactive sessions exploring self-awareness and conscious living.
               </p>
             </div>
 
-            {/* Inclusion 2 */}
-            <div className="bonus-card">
-              <div className="bonus-header">
-                <span className="bonus-tag">INCLUSION #2</span>
-                <span className="bonus-icon">🌅</span>
+            <div className="inclusion-stone-card">
+              <div className="inclusion-header-row">
+                <span className="inclusion-tag">INCLUSION #2</span>
+                <span className="inclusion-icon">📝</span>
               </div>
-              <h3 className="bonus-title">Morning Practice Guide</h3>
-              <p className="bonus-desc">
-                A simple, actionable guide to building a quiet morning reflection window without complicated rituals, rigid rules, or overwhelm.
+              <h3 className="inclusion-title">Guided Reflection &amp; Exercises</h3>
+              <p className="inclusion-desc">
+                Structured practical reflection exercises and prompts to help observe thoughts and clarify personal priorities.
               </p>
             </div>
 
-            {/* Inclusion 3 */}
-            <div className="bonus-card">
-              <div className="bonus-header">
-                <span className="bonus-tag">INCLUSION #3</span>
-                <span className="bonus-icon">📚</span>
+            <div className="inclusion-stone-card">
+              <div className="inclusion-header-row">
+                <span className="inclusion-tag">INCLUSION #3</span>
+                <span className="inclusion-icon">📚</span>
               </div>
-              <h3 className="bonus-title">Workshop Notes &amp; Resources</h3>
-              <p className="bonus-desc">
-                Comprehensive summary notes, key frameworks, and recommended reference readings covered during the 2 live interactive sessions.
+              <h3 className="inclusion-title">Workshop Resources / Workbook</h3>
+              <p className="inclusion-desc">
+                Practical takeaway workbook and reference frameworks for sustained daily practice beyond the workshop.
               </p>
             </div>
 
-            {/* Inclusion 4 */}
-            <div className="bonus-card">
-              <div className="bonus-header">
-                <span className="bonus-tag">INCLUSION #4</span>
-                <span className="bonus-icon">🧭</span>
+            <div className="inclusion-stone-card">
+              <div className="inclusion-header-row">
+                <span className="inclusion-tag">INCLUSION #4</span>
+                <span className="inclusion-icon">💬</span>
               </div>
-              <h3 className="bonus-title">Personal Growth Framework</h3>
-              <p className="bonus-desc">
-                A visual roadmap connecting self-awareness, intentional choices, and daily practice for sustained long-term clarity.
+              <h3 className="inclusion-title">Live Q&amp;A / Reflection Space</h3>
+              <p className="inclusion-desc">
+                Dedicated reflection space and live interactive Q&amp;A to address your questions and personal reflections.
               </p>
             </div>
           </div>
@@ -752,63 +741,83 @@ export default function App() {
 
 
       {/* =========================================================================
-           SECTION 7: WHO IS THIS WORKSHOP FOR?
+           SECTION 7: WHO IS THIS WORKSHOP FOR? (Pill Card Grid)
            ========================================================================= */}
-      <section id="who-should-join" className="section-padding who-section">
+      <section id="who-should-join" className="section-padding">
         <div className="container">
           
-          <div className="section-header text-center">
-            <span className="badge-pill">Target Audience</span>
-            <h2 className="section-title">WHO IS THIS WORKSHOP FOR?</h2>
-            <p className="section-subtitle">This 2-day live experience is crafted for anyone ready for meaningful internal growth:</p>
+          <div className="section-header-artemis text-center">
+            <span className="section-tag-mono">[ TARGET AUDIENCE ]</span>
+            <h2 className="section-heading-artemis">
+              Who Is This <em>Workshop For?</em>
+            </h2>
+            <p className="section-subtext-artemis max-w-750">
+              This 2-day live experience is crafted for anyone ready for meaningful internal growth:
+            </p>
           </div>
 
-          <div className="who-grid">
-            <div className="who-card">
-              <div className="who-avatar">🎓</div>
-              <div className="who-text">
-                <h4>Students &amp; Seekers</h4>
-                <p>Who need calm focus, reduced mental noise, and daily discipline.</p>
+          <div className="who-cloud-grid">
+            <div className="who-pill-card">
+              <div className="who-avatar-icon">🎓</div>
+              <div className="who-text-content">
+                <h4>Students</h4>
+                <p>Building calm focus, self-discipline and daily mental clarity.</p>
               </div>
             </div>
 
-            <div className="who-card">
-              <div className="who-avatar">💼</div>
-              <div className="who-text">
+            <div className="who-pill-card">
+              <div className="who-avatar-icon">💼</div>
+              <div className="who-text-content">
                 <h4>Working Professionals</h4>
-                <p>Dealing with pressure, autopilot routines, and looking for renewed mental clarity.</p>
+                <p>Managing daily pressure, autopilot routines, and seeking clear mental presence.</p>
               </div>
             </div>
 
-            <div className="who-card">
-              <div className="who-avatar">🏡</div>
-              <div className="who-text">
-                <h4>Parents &amp; Homemakers</h4>
-                <p>Balancing family responsibilities who crave intentional time for themselves.</p>
+            <div className="who-pill-card">
+              <div className="who-avatar-icon">🏡</div>
+              <div className="who-text-content">
+                <h4>Parents</h4>
+                <p>Creating intentional, reflective personal space amidst family responsibilities.</p>
               </div>
             </div>
 
-            <div className="who-card">
-              <div className="who-avatar">🚀</div>
-              <div className="who-text">
-                <h4>Entrepreneurs &amp; Founders</h4>
-                <p>Carrying high-stakes decisions and seeking steady presence and grounded focus.</p>
+            <div className="who-pill-card">
+              <div className="who-avatar-icon">🌸</div>
+              <div className="who-text-content">
+                <h4>Homemakers</h4>
+                <p>Prioritizing personal growth, self-awareness, balance and peace.</p>
               </div>
             </div>
 
-            <div className="who-card">
-              <div className="who-avatar">🤝</div>
-              <div className="who-text">
-                <h4>Service Providers &amp; Coaches</h4>
-                <p>Pouring energy into others and needing to recharge their own internal foundation.</p>
+            <div className="who-pill-card">
+              <div className="who-avatar-icon">🚀</div>
+              <div className="who-text-content">
+                <h4>Entrepreneurs &amp; Business Owners</h4>
+                <p>Navigating decisions with grounded presence and focused intention.</p>
               </div>
             </div>
 
-            <div className="who-card">
-              <div className="who-avatar">🌱</div>
-              <div className="who-text">
-                <h4>Anyone Ready to Grow</h4>
-                <p>Anyone who wants to break old autopilot patterns and begin living consciously.</p>
+            <div className="who-pill-card">
+              <div className="who-avatar-icon">👔</div>
+              <div className="who-text-content">
+                <h4>Founders &amp; Leaders</h4>
+                <p>Cultivating steady inner leadership and conscious choice-making.</p>
+              </div>
+            </div>
+
+            <div className="who-pill-card">
+              <div className="who-avatar-icon">🤝</div>
+              <div className="who-text-content">
+                <h4>Coaches &amp; Consultants</h4>
+                <p>Recharging their own internal foundation and personal self-awareness.</p>
+              </div>
+            </div>
+
+            <div className="who-pill-card">
+              <div className="who-avatar-icon">🌱</div>
+              <div className="who-text-content">
+                <h4>Anyone Ready to Explore</h4>
+                <p>Anyone ready to explore personal growth, self-awareness and conscious living.</p>
               </div>
             </div>
           </div>
@@ -820,18 +829,22 @@ export default function App() {
       {/* =========================================================================
            SECTION 8: 2-DAY LIVE SCHEDULE & TIME ZONES
            ========================================================================= */}
-      <section className="urgency-section">
-        <div className="container">
-          <div className="urgency-card">
-            <div className="urgency-badge">
-              <span className="lock-icon">🔒</span> FOUNDING BATCH · 2-DAY LIVE SCHEDULE
+      <section className="section-padding" style={{ background: '#F5F3EE' }}>
+        <div className="container max-w-850">
+          
+          <div className="schedule-table-card-artemis">
+            <div className="section-header-artemis text-center" style={{ marginBottom: '24px' }}>
+              <span className="section-tag-mono">[ 2-DAY LIVE ONLINE SCHEDULE ]</span>
+              <h3 className="section-heading-artemis" style={{ fontSize: '2rem' }}>
+                Workshop <em>Dates &amp; Time Zones</em>
+              </h3>
+              <p className="section-subtext-artemis" style={{ fontSize: '0.95rem' }}>
+                Day 1 creates awareness and the core framework. Day 2 focuses on practice, reflection, implementation and live Q&amp;A.
+              </p>
             </div>
-            <h3 className="urgency-quote">
-              "Day 1 creates awareness and the core framework. Day 2 focuses on practice, reflection, implementation and live Q&amp;A."
-            </h3>
-            
-            <div className="faq-table-wrap" style={{ margin: '24px 0' }}>
-              <table className="tz-table">
+
+            <div className="table-responsive-wrap">
+              <table className="artemis-table">
                 <thead>
                   <tr>
                     <th>Audience / Region</th>
@@ -857,7 +870,7 @@ export default function App() {
                     <td>🇺🇸 <strong>New York (EDT)</strong></td>
                     <td>7 Oct • 11:00 AM</td>
                     <td>8 Oct • 11:00 AM</td>
-                    <td>U.S. daylight time daytime option*</td>
+                    <td>U.S. daytime option*</td>
                   </tr>
                   <tr>
                     <td>🇺🇸 <strong>Los Angeles (PDT)</strong></td>
@@ -867,17 +880,19 @@ export default function App() {
                   </tr>
                 </tbody>
               </table>
-              <p className="mt-15 text-muted" style={{ textAlign: 'center' }}>
-                <small><em>*U.S. time varies by location and daylight saving time. Zoom links delivered directly via WhatsApp.</em></small>
-              </p>
             </div>
 
-            <div className="urgency-cta">
-              <button onClick={() => scrollToSection('register')} className="btn btn-hero-highlight btn-lg">
-                RESERVE MY FREE SEAT →
+            <p className="text-muted text-center" style={{ fontSize: '0.8rem', marginTop: '12px' }}>
+              <em>*U.S. time varies by location and daylight saving time. Zoom links delivered directly via WhatsApp.</em>
+            </p>
+
+            <div className="text-center mt-40">
+              <button onClick={() => scrollToSection('register')} className="btn-primary-orange">
+                RESERVE MY FREE SEAT ↗
               </button>
             </div>
           </div>
+
         </div>
       </section>
 
@@ -885,85 +900,83 @@ export default function App() {
       {/* =========================================================================
            SECTION 9: FREQUENTLY ASKED QUESTIONS
            ========================================================================= */}
-      <section id="faq" className="section-padding faq-section">
-        <div className="container max-w-900">
+      <section id="faq" className="section-padding">
+        <div className="container max-w-850">
           
-          <div className="section-header text-center">
-            <span className="badge-pill">Got Questions?</span>
-            <h2 className="section-title">Frequently Asked Questions</h2>
-            <p className="section-subtitle">Everything you need to know before joining this live cohort.</p>
+          <div className="section-header-artemis text-center">
+            <span className="section-tag-mono">[ FAQ ]</span>
+            <h2 className="section-heading-artemis">
+              Frequently Asked <em>Questions</em>
+            </h2>
+            <p className="section-subtext-artemis">
+              Everything you need to know before joining this live cohort:
+            </p>
           </div>
 
-          <div className="faq-accordion">
+          <div className="faq-accordion-artemis">
             {/* FAQ 1 */}
-            <div className={`faq-item ${openFaqIndex === 0 ? 'active' : ''}`}>
-              <button className="faq-trigger" onClick={() => setOpenFaqIndex(openFaqIndex === 0 ? -1 : 0)}>
-                <span className="faq-question">Is this workshop only about waking up early?</span>
-                <span className="faq-arrow">+</span>
+            <div className={`faq-item-artemis ${openFaqIndex === 0 ? 'active' : ''}`}>
+              <button className="faq-trigger-btn" onClick={() => setOpenFaqIndex(openFaqIndex === 0 ? -1 : 0)}>
+                <span className="faq-question-text">Is this workshop really free?</span>
+                <span className="faq-icon-toggle">+</span>
               </button>
-              <div className="faq-answer">
-                <p>
-                  No. Rising early is a supportive practice, but the real focus is on self-awareness, understanding your mental patterns, and learning how to intentionally direct your focus and daily actions.
-                </p>
-              </div>
+              {openFaqIndex === 0 && (
+                <div className="faq-answer-body">
+                  <p>Yes, the live workshop is 100% free to attend.</p>
+                </div>
+              )}
             </div>
 
             {/* FAQ 2 */}
-            <div className={`faq-item ${openFaqIndex === 1 ? 'active' : ''}`}>
-              <button className="faq-trigger" onClick={() => setOpenFaqIndex(openFaqIndex === 1 ? -1 : 1)}>
-                <span className="faq-question">I'm not really a "morning person." Will this still work for me?</span>
-                <span className="faq-arrow">+</span>
+            <div className={`faq-item-artemis ${openFaqIndex === 1 ? 'active' : ''}`}>
+              <button className="faq-trigger-btn" onClick={() => setOpenFaqIndex(openFaqIndex === 1 ? -1 : 1)}>
+                <span className="faq-question-text">Do I need prior experience with meditation or mindfulness?</span>
+                <span className="faq-icon-toggle">+</span>
               </button>
-              <div className="faq-answer">
-                <p>
-                  Yes. This is not about forcing yourself into a rigid routine. It's about understanding how to create intentional mental space and calmness during the day, regardless of your current schedule.
-                </p>
-              </div>
+              {openFaqIndex === 1 && (
+                <div className="faq-answer-body">
+                  <p>No. The workshop is designed for beginners as well as people who already practice.</p>
+                </div>
+              )}
             </div>
 
             {/* FAQ 3 */}
-            <div className={`faq-item ${openFaqIndex === 2 ? 'active' : ''}`}>
-              <button className="faq-trigger" onClick={() => setOpenFaqIndex(openFaqIndex === 2 ? -1 : 2)}>
-                <span className="faq-question">Why is the workshop split across 2 days?</span>
-                <span className="faq-arrow">+</span>
+            <div className={`faq-item-artemis ${openFaqIndex === 2 ? 'active' : ''}`}>
+              <button className="faq-trigger-btn" onClick={() => setOpenFaqIndex(openFaqIndex === 2 ? -1 : 2)}>
+                <span className="faq-question-text">Is this therapy or medical treatment?</span>
+                <span className="faq-icon-toggle">+</span>
               </button>
-              <div className="faq-answer">
-                <p>
-                  Day 1 is designed to build awareness and share the core 4-step framework. Day 2 focuses on practice, personal reflection, habit implementation, and live interactive Q&amp;A.
-                </p>
-              </div>
+              {openFaqIndex === 2 && (
+                <div className="faq-answer-body">
+                  <p>No. This is an educational and personal-growth workshop. It is not a substitute for qualified medical or mental-health care.</p>
+                </div>
+              )}
             </div>
 
             {/* FAQ 4 */}
-            <div className={`faq-item ${openFaqIndex === 3 ? 'active' : ''}`}>
-              <button className="faq-trigger" onClick={() => setOpenFaqIndex(openFaqIndex === 3 ? -1 : 3)}>
-                <span className="faq-question">What time is this in my time zone?</span>
-                <span className="faq-arrow">+</span>
+            <div className={`faq-item-artemis ${openFaqIndex === 3 ? 'active' : ''}`}>
+              <button className="faq-trigger-btn" onClick={() => setOpenFaqIndex(openFaqIndex === 3 ? -1 : 3)}>
+                <span className="faq-question-text">How will I join?</span>
+                <span className="faq-icon-toggle">+</span>
               </button>
-              <div className="faq-answer">
-                <p>
-                  Both sessions take place on <strong>Wednesday, 7 October &amp; Thursday, 8 October 2026</strong> at:
-                </p>
-                <ul style={{ paddingLeft: '20px', marginTop: '10px', color: 'var(--text-secondary)' }}>
-                  <li><strong>India (IST):</strong> 8:30 PM – 9:30 PM</li>
-                  <li><strong>Dubai (GST):</strong> 7:00 PM – 8:00 PM</li>
-                  <li><strong>New York (EDT):</strong> 11:00 AM – 12:00 PM*</li>
-                  <li><strong>London (BST):</strong> 4:00 PM – 5:00 PM</li>
-                </ul>
-              </div>
+              {openFaqIndex === 3 && (
+                <div className="faq-answer-body">
+                  <p>Participants will receive the live access details after registration via email and WhatsApp.</p>
+                </div>
+              )}
             </div>
 
             {/* FAQ 5 */}
-            <div className={`faq-item ${openFaqIndex === 4 ? 'active' : ''}`}>
-              <button className="faq-trigger" onClick={() => setOpenFaqIndex(openFaqIndex === 4 ? -1 : 4)}>
-                <span className="faq-question">Is this workshop religious or sectarian?</span>
-                <span className="faq-arrow">+</span>
+            <div className={`faq-item-artemis ${openFaqIndex === 4 ? 'active' : ''}`}>
+              <button className="faq-trigger-btn" onClick={() => setOpenFaqIndex(openFaqIndex === 4 ? -1 : 4)}>
+                <span className="faq-question-text">What should I bring?</span>
+                <span className="faq-icon-toggle">+</span>
               </button>
-              <div className="faq-answer">
-                <p>
-                  No. The workshop is entirely practical, secular, and focused on personal growth, mindset, self-reflection, and intentional living for people of all backgrounds.
-                </p>
-              </div>
+              {openFaqIndex === 4 && (
+                <div className="faq-answer-body">
+                  <p>Bring a notebook, a quiet space if possible, and a willingness to pause and reflect.</p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -974,96 +987,89 @@ export default function App() {
       {/* =========================================================================
            SECTION 10: REGISTRATION FORM / THANK-YOU PAGE
            ========================================================================= */}
-      <section id="register" className="section-padding register-section">
-        <div className="container max-w-850">
+      <section id="register" className="section-padding" style={{ background: '#F5F3EE' }}>
+        <div className="container max-w-750">
           
-          <div className="form-wrapper-card">
-            
+          <div className="register-card-artemis">
             {!isSubmitted ? (
               <>
-                <div className="form-card-header text-center">
-                  <span className="badge-pill">Free Registration</span>
-                  <h2 className="form-title">Reserve Your Seat</h2>
-                  <p className="form-subtitle">
+                <div className="form-header-artemis text-center">
+                  <span className="section-tag-mono">[ 100% FREE ACCESS ]</span>
+                  <h2 className="section-heading-artemis" style={{ fontSize: '2.4rem' }}>
+                    Reserve Your <em>Free Seat</em>
+                  </h2>
+                  <p className="section-subtext-artemis" style={{ fontSize: '0.95rem' }}>
                     Wednesday 7 Oct &amp; Thursday 8 Oct 2026 • 8:30 PM IST (Dubai 7 PM • NY 11 AM*)
                   </p>
-
-                  <div className="fee-display-container">
-                    <div className="fee-pill-badges">
-                      <span className="fee-badge active-badge free-tag">🎁 100% Free Live Online Workshop</span>
-                      <span className="fee-badge">No Credit Card Required</span>
-                    </div>
-                  </div>
                 </div>
 
-                <form onSubmit={handleFormSubmit} className="registration-form" noValidate>
-                  {/* Field 1: Full Name */}
-                  <div className={`form-group ${formErrors.fullName ? 'has-error' : ''}`}>
-                    <label htmlFor="fullName" className="form-label">
-                      1. Full Name <span className="required">*</span>
+                <form onSubmit={handleFormSubmit} noValidate>
+                  {/* Full Name */}
+                  <div className="form-group-artemis">
+                    <label htmlFor="fullName" className="form-label-artemis">
+                      1. Full Name *
                     </label>
                     <input
                       type="text"
                       id="fullName"
                       name="fullName"
-                      className="form-input"
+                      className="form-input-artemis"
                       placeholder="What should we call you?"
                       value={formData.fullName}
                       onChange={handleInputChange}
                     />
-                    {formErrors.fullName && <span className="error-msg">{formErrors.fullName}</span>}
+                    {formErrors.fullName && <span className="error-text-artemis">{formErrors.fullName}</span>}
                   </div>
 
-                  {/* Field 2: Email Address */}
-                  <div className={`form-group ${formErrors.email ? 'has-error' : ''}`}>
-                    <label htmlFor="email" className="form-label">
-                      2. Email Address <span className="required">*</span>
+                  {/* Email */}
+                  <div className="form-group-artemis">
+                    <label htmlFor="email" className="form-label-artemis">
+                      2. Email Address *
                     </label>
                     <input
                       type="email"
                       id="email"
                       name="email"
-                      className="form-input"
+                      className="form-input-artemis"
                       placeholder="Where should we send your workshop details?"
                       value={formData.email}
                       onChange={handleInputChange}
                     />
-                    {formErrors.email && <span className="error-msg">{formErrors.email}</span>}
+                    {formErrors.email && <span className="error-text-artemis">{formErrors.email}</span>}
                   </div>
 
-                  {/* Field 3: WhatsApp Number */}
-                  <div className={`form-group ${formErrors.whatsapp ? 'has-error' : ''}`}>
-                    <label htmlFor="whatsapp" className="form-label">
-                      3. WhatsApp Number <span className="required">*</span>
+                  {/* WhatsApp */}
+                  <div className="form-group-artemis">
+                    <label htmlFor="whatsapp" className="form-label-artemis">
+                      3. WhatsApp Number *
                     </label>
-                    <div className="phone-input-group">
-                      <span className="country-prefix">{currentCountryInfo.code}</span>
+                    <div className="phone-group-wrap">
+                      <span className="phone-prefix-artemis">{currentCountryInfo.code}</span>
                       <input
                         type="tel"
                         id="whatsapp"
                         name="whatsapp"
-                        className="form-input phone-field"
+                        className="form-input-artemis phone-field-artemis"
                         placeholder={currentCountryInfo.placeholder}
                         value={formData.whatsapp}
                         onChange={handleInputChange}
                       />
                     </div>
-                    <span className="field-hint">For workshop reminders, Zoom links, and important session updates.</span>
-                    {formErrors.whatsapp && <span className="error-msg">{formErrors.whatsapp}</span>}
+                    {formErrors.whatsapp && <span className="error-text-artemis">{formErrors.whatsapp}</span>}
                   </div>
 
-                  {/* Field 4: Country */}
-                  <div className="form-group">
-                    <label className="form-label">
-                      4. Country <span className="required">*</span>
+                  {/* Country Selection */}
+                  <div className="form-group-artemis">
+                    <label className="form-label-artemis">
+                      4. Country *
                     </label>
-                    <div className="radio-cards-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))' }}>
+                    <div className="country-grid-artemis">
                       {Object.keys(COUNTRY_CONFIG).map((countryKey) => {
                         const item = COUNTRY_CONFIG[countryKey];
                         return (
                           <label
                             key={countryKey}
-                            className={`radio-card ${selectedCountry === countryKey ? 'selected' : ''}`}
+                            className={`country-card-label ${selectedCountry === countryKey ? 'selected' : ''}`}
                             onClick={() => handleCountryChange(countryKey)}
                           >
                             <input
@@ -1073,28 +1079,24 @@ export default function App() {
                               checked={selectedCountry === countryKey}
                               onChange={() => handleCountryChange(countryKey)}
                             />
-                            <span className="radio-card-content">
-                              <span className="flag-icon">{item.flag}</span>
-                              <span className="country-name">{item.name}</span>
-                            </span>
+                            <span>{item.flag} {item.name}</span>
                           </label>
                         );
                       })}
                     </div>
                   </div>
 
-                  {/* Field 5: What best describes you? */}
-                  <div className="form-group">
-                    <label htmlFor="userRole" className="form-label">
-                      5. What best describes you? <span className="required">*</span>
+                  {/* User Role */}
+                  <div className="form-group-artemis">
+                    <label htmlFor="userRole" className="form-label-artemis">
+                      5. What best describes you? *
                     </label>
                     <select
                       id="userRole"
                       name="userRole"
-                      className="form-input"
+                      className="form-input-artemis"
                       value={formData.userRole}
                       onChange={handleInputChange}
-                      style={{ padding: '12px 14px', borderRadius: 'var(--radius-sm)' }}
                     >
                       {ROLE_OPTIONS.map((role) => (
                         <option key={role} value={role}>{role}</option>
@@ -1102,25 +1104,25 @@ export default function App() {
                     </select>
                   </div>
 
-                  {/* Field 6: What made you interested in joining this workshop? (Optional) */}
-                  <div className="form-group">
-                    <label htmlFor="interestReason" className="form-label">
+                  {/* Interest Reason (Optional) */}
+                  <div className="form-group-artemis">
+                    <label htmlFor="interestReason" className="form-label-artemis">
                       6. What made you interested in joining this workshop? <small className="text-muted">(Optional)</small>
                     </label>
                     <textarea
                       id="interestReason"
                       name="interestReason"
                       rows={3}
-                      className="form-input form-textarea"
-                      placeholder="e.g. Personal growth, overthinking, lack of clarity, stress, habits, mindfulness, purpose, simply wanting to learn..."
+                      className="form-input-artemis"
+                      placeholder="e.g. Personal growth, overthinking, lack of clarity, habits, mindfulness, purpose..."
                       value={formData.interestReason}
                       onChange={handleInputChange}
                     />
                   </div>
 
-                  {/* Field 7: Form Consent / Privacy Checkbox */}
-                  <div className={`form-group ${formErrors.consent ? 'has-error' : ''}`} style={{ marginTop: '14px' }}>
-                    <label className="form-checkbox-label">
+                  {/* Privacy Checkbox */}
+                  <div className="form-group-artemis" style={{ marginTop: '10px' }}>
+                    <label className="checkbox-label-artemis">
                       <input
                         type="checkbox"
                         name="consent"
@@ -1128,123 +1130,71 @@ export default function App() {
                         onChange={handleInputChange}
                       />
                       <span>
-                        I agree to receive workshop access details, reminders and related updates by email and/or WhatsApp. I understand I can opt out of non-essential communications.
+                        Your information is used to send workshop access and reminder details. We respect your privacy and won't sell your information.
                       </span>
                     </label>
-                    {formErrors.consent && <span className="error-msg">{formErrors.consent}</span>}
+                    {formErrors.consent && <span className="error-text-artemis">{formErrors.consent}</span>}
                   </div>
 
                   {/* Submit Button */}
-                  <div className="form-submit-wrap">
-                    <button type="submit" disabled={isSubmitting} className="btn btn-hero-highlight btn-xl btn-block" id="formSubmitBtn">
-                      <span className="btn-text">{isSubmitting ? 'Reserving...' : 'RESERVE MY FREE SEAT →'}</span>
-                      <span className="btn-subtext">— 100% Free Live Online Workshop</span>
+                  <div style={{ marginTop: '20px' }}>
+                    <button type="submit" disabled={isSubmitting} className="btn-primary-orange" style={{ width: '100%' }}>
+                      {isSubmitting ? 'RESERVING YOUR SEAT...' : 'RESERVE MY FREE SEAT ↗'}
                     </button>
-                    <p className="form-guarantee-note">
+                    <p className="text-muted text-center" style={{ fontSize: '0.8rem', marginTop: '10px' }}>
                       🔒 Instant confirmation · Secure SSL connection · 100% Free
                     </p>
                   </div>
                 </form>
               </>
             ) : (
-              /* =========================================================================
-                   SECTION 11: THANK-YOU PAGE / CONFIRMATION
-                   ========================================================================= */
-              <div className="thank-you-container">
-                <div className="thank-you-badge">🎉 YOU’RE IN!</div>
-                <h2 className="thank-you-title">Your seat for the workshop is reserved.</h2>
-                <p className="thank-you-subtitle">
-                  <strong>Wake Before The World — Reset Your Mind. Realign Your Life.</strong>
+              /* Thank You Page */
+              <div className="thank-you-artemis-wrap">
+                <div className="thank-you-badge-artemis">🎉 YOU’RE IN!</div>
+                <h2 className="thank-you-title-artemis">Your seat is reserved.</h2>
+                <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+                  <strong>Your registration for Brahma Muhurta Awakening is confirmed.</strong><br />
+                  Wake Before The World — Reset Your Mind. Realign Your Life.
                 </p>
 
-                {/* Event Schedule Box */}
-                <div className="thank-you-schedule-card">
-                  <div className="schedule-item">
-                    <span className="sched-icon">📅</span>
-                    <div>
-                      <strong>Session 1:</strong> Wednesday, 7 October 2026 • 8:30 PM IST
-                    </div>
-                  </div>
-                  <div className="schedule-item">
-                    <span className="sched-icon">📅</span>
-                    <div>
-                      <strong>Session 2:</strong> Thursday, 8 October 2026 • 8:30 PM IST
-                    </div>
-                  </div>
-                  <div className="schedule-subtext">
-                    🌍 <strong>Dubai:</strong> 7:00 PM • <strong>New York:</strong> 11:00 AM*<br />
-                    🎥 <em>Live Online • 60 Minutes Each • Free</em><br />
-                    <small>*U.S. time varies by location and daylight saving time.</small>
-                  </div>
-                </div>
+                <div className="thank-you-actions-artemis">
+                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', fontStyle: 'italic', marginBottom: '14px', color: 'var(--text-primary)' }}>
+                    Do These 3 Things Now:
+                  </h3>
 
-                {/* 3 Action Steps Box */}
-                <div className="thank-you-actions-card">
-                  <h3 className="actions-card-title">Do These 3 Things Now</h3>
-                  
-                  {/* Step 1 */}
-                  <div className="action-step-item">
-                    <div className="step-num">1️⃣</div>
-                    <div className="step-body">
-                      <h4>Add the event to your calendar</h4>
-                      <p>Lock both Session 1 and Session 2 into your schedule so you don't miss the live stream:</p>
-                      <div className="calendar-buttons-row">
-                        <a
-                          href={googleCalendarUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn btn-outline-cal"
-                        >
-                          📅 Add to Google Calendar
-                        </a>
-                        <button
-                          type="button"
-                          onClick={downloadIcsFile}
-                          className="btn btn-outline-cal"
-                        >
-                          📥 Add to Outlook / Apple (.ics)
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Step 2 */}
-                  <div className="action-step-item">
-                    <div className="step-num">2️⃣</div>
-                    <div className="step-body">
-                      <h4>Save the workshop time in your time zone</h4>
-                      <div className="tz-chips">
-                        <span className="tz-chip">🇮🇳 India: <strong>8:30 PM IST</strong></span>
-                        <span className="tz-chip">🇦🇪 Dubai: <strong>7:00 PM</strong></span>
-                        <span className="tz-chip">🇺🇸 New York: <strong>11:00 AM*</strong></span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Step 3 */}
-                  <div className="action-step-item highlight-step">
-                    <div className="step-num">3️⃣</div>
-                    <div className="step-body">
-                      <h4>Join the official WhatsApp workshop group</h4>
-                      <p>This is where we send live Zoom room access, reflection worksheets, and session updates.</p>
-                      <a
-                        href="https://chat.whatsapp.com/sample-group"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-whatsapp-join btn-block"
-                      >
-                        JOIN THE WORKSHOP WHATSAPP GROUP →
+                  <div style={{ marginBottom: '16px' }}>
+                    <strong>1️⃣ Add to your calendar:</strong>
+                    <div style={{ display: 'flex', gap: '10px', marginTop: '8px', flexWrap: 'wrap' }}>
+                      <a href={googleCalendarUrl} target="_blank" rel="noopener noreferrer" className="btn-cal-artemis">
+                        📅 Google Calendar
                       </a>
+                      <button type="button" onClick={downloadIcsFile} className="btn-cal-artemis">
+                        📥 Outlook / Apple (.ics)
+                      </button>
                     </div>
+                  </div>
+
+                  <div style={{ marginBottom: '16px' }}>
+                    <strong>2️⃣ Save the workshop time in your time zone:</strong>
+                    <div style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                      🇮🇳 India: 8:30 PM IST • 🇦🇪 Dubai: 7:00 PM • 🇺🇸 New York: 11:00 AM EDT*
+                    </div>
+                  </div>
+
+                  <div>
+                    <strong>3️⃣ Join the official WhatsApp group:</strong>
+                    <a href="https://chat.whatsapp.com/sample-group" target="_blank" rel="noopener noreferrer" className="btn-whatsapp-artemis">
+                      JOIN WORKSHOP WHATSAPP GROUP ↗
+                    </a>
                   </div>
                 </div>
 
-                {/* Reflection Callout */}
-                <div className="thank-you-reflection-card">
-                  <div className="reflection-icon">💭</div>
-                  <div className="reflection-text">
-                    <strong>Before Day 1, take 5 minutes and reflect:</strong><br />
-                    <em>"What is one area of my life where I want greater clarity right now?"</em> Don’t solve it. Just notice it—and bring that question with you.
+                <div style={{ background: '#FFFFFF', border: '1px solid var(--border-card)', borderRadius: 'var(--radius-md)', padding: '20px', textAlign: 'left', marginTop: '20px' }}>
+                  <div style={{ fontStyle: 'italic', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                    "Thank you for choosing to spend this time with yourself. I created this workshop because my own journey of learning, practicing and reflecting changed the way I look at life. I'm not here to tell you that I have all the answers. I'm here to share what I've learned, what I've practiced and what I've experienced—and create a space where you can explore your own journey. See you inside."
+                  </div>
+                  <div style={{ marginTop: '10px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                    — Ranu Patel, Co-Founder, The Narayan Presence
                   </div>
                 </div>
               </div>
@@ -1256,79 +1206,53 @@ export default function App() {
 
 
       {/* =========================================================================
-           SECTION 12: FOOTER
+           SECTION 12: SITE FOOTER (Artemis Minimalist Aesthetic)
            ========================================================================= */}
-      <footer className="site-footer">
+      <footer className="site-footer-artemis">
         <div className="container">
           
-          <div className="footer-top">
-            <div className="footer-brand">
+          <div className="footer-inner-top">
+            <div className="footer-brand-side">
               <div className="navbar-brand">
                 <img src={logoImg} alt="Brahmamuhurta Logo" className="brand-logo-img" />
-                <span className="brand-name">BRAHMAMUHURTA</span>
+                <div className="brand-title-wrap">
+                  <span className="brand-name">BRAHMAMUHURTA</span>
+                  <span className="brand-subline">The Narayan Presence</span>
+                </div>
               </div>
-              <p className="footer-motto">
+              <p className="footer-tagline-artemis">
                 Wake Before The World. Reset Your Mind. Realign Your Life.
               </p>
             </div>
 
-            <div className="footer-meta-notes">
-              <div className="badge-pill sm">Live 2-Day Founding Batch</div>
-              <p className="footer-time-reminder">
-                <strong>Workshop Dates:</strong> 7 &amp; 8 October 2026 • 8:30 PM IST (Dubai 7:00 PM • New York 11:00 AM*).<br />
+            <div>
+              <span className="section-tag-mono" style={{ background: '#FFFFFF' }}>[ FOUNDING BATCH ]</span>
+              <p className="footer-schedule-reminder" style={{ marginTop: '8px' }}>
+                <strong>Dates:</strong> 7 &amp; 8 October 2026 • 8:30 PM IST (Dubai 7 PM • NY 11 AM*)<br />
                 The Narayan Presence • Awaken • Align • Transform
               </p>
             </div>
           </div>
 
-          <hr className="footer-divider" />
+          <hr className="footer-divider-artemis" />
 
-          <div className="footer-disclaimer">
-            <p>
-              This page is not affiliated with, endorsed by, or connected to Meta, Facebook, Instagram, or Google in any way.
-            </p>
-          </div>
-
-          <div className="footer-bottom">
-            <div className="copyright">
+          <div className="footer-bottom-artemis">
+            <div>
               © {new Date().getFullYear()} The Narayan Presence. All Rights Reserved.
             </div>
-            <div className="footer-legal-links">
-              <button type="button" onClick={() => alert('Privacy Policy: The Narayan Presence strictly protects your personal information and will never share or sell your data.')}>
+            <div className="footer-links-artemis">
+              <a href="https://narayanpresence.com/privacy-policy/" target="_blank" rel="noopener noreferrer">
                 Privacy Policy
-              </button>
-              <span className="legal-sep">|</span>
-              <button type="button" onClick={() => alert('Terms & Conditions: All content is proprietary to The Narayan Presence and intended for personal transformational use.')}>
+              </a>
+              <span>·</span>
+              <a href="https://narayanpresence.com/terms-and-conditions/" target="_blank" rel="noopener noreferrer">
                 Terms &amp; Conditions
-              </button>
-              <span className="legal-sep">|</span>
-              <a
-                href="/admin"
-                style={{ color: '#F59E0B', fontWeight: 'bold', textDecoration: 'none' }}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                ⚙️ Admin Portal
               </a>
             </div>
           </div>
 
         </div>
       </footer>
-
-
-      {/* Floating Bar */}
-      <div className={`floating-cta-bar ${showFloatingBar ? 'visible' : ''}`}>
-        <div className="container floating-inner">
-          <div className="floating-info">
-            <span className="pulse-dot"></span>
-            <span className="floating-batch-text"><strong>Founding Batch:</strong> 7 &amp; 8 Oct 2026 • {seatsLeft} Seats Left</span>
-          </div>
-          <button onClick={() => scrollToSection('register')} className="btn btn-hero-highlight btn-sm">
-            RESERVE MY FREE SEAT →
-          </button>
-        </div>
-      </div>
     </div>
   );
 }
