@@ -378,7 +378,6 @@ export default function App() {
         <div className="container">
           
           <div className="section-header-artemis text-center">
-            <span className="section-tag-mono">[ SELF-REFLECTION CHECKLIST ]</span>
             <h2 className="section-heading-artemis">
               This Workshop Is <em>For You If…</em>
             </h2>
@@ -449,7 +448,6 @@ export default function App() {
         <div className="container">
           
           <div className="section-header-artemis text-center">
-            <span className="section-tag-mono">[ THE CORE FRAMEWORK ]</span>
             <h2 className="section-heading-artemis">
               The Narayan Method — <em>4 Shifts Toward Conscious Living</em>
             </h2>
@@ -540,7 +538,6 @@ export default function App() {
         <div className="container">
           
           <div className="section-header-artemis text-center">
-            <span className="section-tag-mono">[ TANGIBLE OUTCOMES ]</span>
             <h2 className="section-heading-artemis">
               What You’ll <em>Walk Away With</em>
             </h2>
@@ -681,7 +678,6 @@ export default function App() {
         <div className="container">
           
           <div className="section-header-artemis text-center">
-            <span className="section-tag-mono">[ FOUNDING BATCH BENEFITS ]</span>
             <h2 className="section-heading-artemis">
               Founding Batch — <em>Special Inclusions</em>
             </h2>
@@ -747,7 +743,6 @@ export default function App() {
         <div className="container">
           
           <div className="section-header-artemis text-center">
-            <span className="section-tag-mono">[ TARGET AUDIENCE ]</span>
             <h2 className="section-heading-artemis">
               Who Is This <em>Workshop For?</em>
             </h2>
@@ -834,7 +829,6 @@ export default function App() {
           
           <div className="schedule-table-card-artemis">
             <div className="section-header-artemis text-center" style={{ marginBottom: '24px' }}>
-              <span className="section-tag-mono">[ 2-DAY LIVE ONLINE SCHEDULE ]</span>
               <h3 className="section-heading-artemis" style={{ fontSize: '2rem' }}>
                 Workshop <em>Dates &amp; Time Zones</em>
               </h3>
@@ -904,7 +898,6 @@ export default function App() {
         <div className="container max-w-850">
           
           <div className="section-header-artemis text-center">
-            <span className="section-tag-mono">[ FAQ ]</span>
             <h2 className="section-heading-artemis">
               Frequently Asked <em>Questions</em>
             </h2>
@@ -1183,7 +1176,7 @@ export default function App() {
 
                   <div>
                     <strong>3️⃣ Join the official WhatsApp group:</strong>
-                    <a href="https://chat.whatsapp.com/sample-group" target="_blank" rel="noopener noreferrer" className="btn-whatsapp-artemis">
+                    <a href="https://chat.whatsapp.com/LB2a30vfTFB3JsXQeXUqVU" target="_blank" rel="noopener noreferrer" className="btn-whatsapp-artemis">
                       JOIN WORKSHOP WHATSAPP GROUP ↗
                     </a>
                   </div>
