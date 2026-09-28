@@ -267,18 +267,81 @@ export default function App() {
               Start your day with greater clarity, intention and self-awareness—before the noise of the world takes over.
             </p>
 
-            {/* Date / Time Block */}
-            <div className="hero-datetime-card">
-              <div className="datetime-row">
-                <span className="dt-icon">📅</span>
-                <div>
-                  <strong>WEDNESDAY, 7 OCTOBER 2026 • 8:30 PM IST</strong><br />
-                  <strong>THURSDAY, 8 OCTOBER 2026 • 8:30 PM IST</strong>
+            {/* Ultra-Attractive Premium Event Schedule Card */}
+            <div className="hero-schedule-showcase">
+              <div className="schedule-showcase-header">
+                <div className="showcase-live-pill">
+                  <span className="live-pulsing-dot"></span>
+                  <span>2-DAY LIVE ONLINE COHORT</span>
+                </div>
+                <span className="showcase-free-badge">100% FREE ACCESS</span>
+              </div>
+
+              {/* 2-Day Side-by-Side Session Cards */}
+              <div className="showcase-sessions-grid">
+                {/* Session 1 */}
+                <div className="showcase-session-item">
+                  <div className="session-date-col">
+                    <span className="session-day-label">DAY 1</span>
+                    <span className="session-date-num">07</span>
+                    <span className="session-month-label">OCT 2026</span>
+                  </div>
+                  <div className="session-info-col">
+                    <span className="session-weekday">Wednesday</span>
+                    <div className="session-time-highlight">
+                      <span className="time-clock-icon">🕣</span> 8:30 PM <span className="tz-label">IST</span>
+                    </div>
+                    <span className="session-topic-tag">Awareness &amp; Reset</span>
+                  </div>
+                </div>
+
+                {/* Session Divider */}
+                <div className="showcase-session-sep">
+                  <span>+</span>
+                </div>
+
+                {/* Session 2 */}
+                <div className="showcase-session-item">
+                  <div className="session-date-col highlight">
+                    <span className="session-day-label">DAY 2</span>
+                    <span className="session-date-num">08</span>
+                    <span className="session-month-label">OCT 2026</span>
+                  </div>
+                  <div className="session-info-col">
+                    <span className="session-weekday">Thursday</span>
+                    <div className="session-time-highlight">
+                      <span className="time-clock-icon">🕣</span> 8:30 PM <span className="tz-label">IST</span>
+                    </div>
+                    <span className="session-topic-tag">Practice &amp; Realign</span>
+                  </div>
                 </div>
               </div>
-              <div className="datetime-sub">
-                Dubai 7:00 PM • New York 11:00 AM*
-                <small className="dt-note">*U.S. time varies by location and daylight saving time.</small>
+
+              {/* Global Timezones Interactive Bar */}
+              <div className="showcase-world-timezones">
+                <div className="tz-bar-label">
+                  <span className="globe-icon">🌍</span> Global Time Conversion:
+                </div>
+                <div className="tz-badges-wrap">
+                  <div className="tz-showcase-pill primary">
+                    <span className="flag">🇮🇳</span>
+                    <span className="tz-name">India</span>
+                    <strong className="tz-time">8:30 PM IST</strong>
+                  </div>
+                  <div className="tz-showcase-pill">
+                    <span className="flag">🇦🇪</span>
+                    <span className="tz-name">Dubai</span>
+                    <strong className="tz-time">7:00 PM</strong>
+                  </div>
+                  <div className="tz-showcase-pill">
+                    <span className="flag">🇺🇸</span>
+                    <span className="tz-name">New York</span>
+                    <strong className="tz-time">11:00 AM EDT*</strong>
+                  </div>
+                </div>
+                <div className="tz-disclaimer-note">
+                  *60 minutes live per session. U.S. time varies by location and daylight saving.
+                </div>
               </div>
             </div>
 

@@ -23,6 +23,20 @@ const registrationSchema = new mongoose.Schema(
       default: 'India',
       trim: true
     },
+    userRole: {
+      type: String,
+      default: '',
+      trim: true
+    },
+    interestReason: {
+      type: String,
+      default: '',
+      trim: true
+    },
+    consent: {
+      type: Boolean,
+      default: true
+    },
     fee: {
       type: String,
       default: 'FREE',

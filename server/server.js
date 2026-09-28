@@ -97,7 +97,7 @@ app.get('/api/health', (req, res) => {
 // 1. POST /api/register (Landing Page Registration Form)
 app.post('/api/register', async (req, res) => {
   try {
-    const { fullName, email, whatsapp, country, fee, stuckArea, liveCommit, goDeeper, status, notes } = req.body;
+    const { fullName, email, whatsapp, country, userRole, interestReason, consent, fee, stuckArea, liveCommit, goDeeper, status, notes } = req.body;
 
     if (!fullName || !email || !whatsapp) {
       return res.status(400).json({ success: false, error: 'Full name, email, and WhatsApp number are required.' });
@@ -108,6 +108,9 @@ app.post('/api/register', async (req, res) => {
       email: email.trim(),
       whatsapp: whatsapp.trim(),
       country: country || 'India',
+      userRole: userRole ? userRole.trim() : '',
+      interestReason: interestReason ? interestReason.trim() : '',
+      consent: consent !== undefined ? Boolean(consent) : true,
       fee: fee || 'FREE',
       stuckArea: stuckArea ? stuckArea.trim() : '',
       liveCommit: liveCommit || "Yes, I'll be there live",
@@ -226,7 +229,7 @@ app.get('/api/admin/export', async (req, res) => {
       registrations = readLocalBackup();
     }
 
-    const headers = ['ID', 'Full Name', 'Email', 'WhatsApp', 'Country', 'Fee', 'Stuck Area', 'Live Commit', 'Go Deeper', 'Status', 'Registered At', 'Notes'];
+    const headers = ['ID', 'Full Name', 'Email', 'WhatsApp', 'Country', 'Role / Description', 'Interest Reason', 'Consent Agreed', 'Fee', 'Stuck Area', 'Status', 'Registered At', 'Notes'];
     const escapeCsv = (val) => `"${String(val || '').replace(/"/g, '""')}"`;
     
     const rows = registrations.map(r => [
@@ -235,10 +238,11 @@ app.get('/api/admin/export', async (req, res) => {
       escapeCsv(r.email),
       escapeCsv(r.whatsapp),
       escapeCsv(r.country),
+      escapeCsv(r.userRole),
+      escapeCsv(r.interestReason),
+      escapeCsv(r.consent !== false ? 'Yes' : 'No'),
       escapeCsv(r.fee),
       escapeCsv(r.stuckArea),
-      escapeCsv(r.liveCommit),
-      escapeCsv(r.goDeeper),
       escapeCsv(r.status),
       escapeCsv(r.registeredAt),
       escapeCsv(r.notes)

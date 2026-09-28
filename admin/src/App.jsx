@@ -18,10 +18,10 @@ export default function AdminPanel({ onBackToLanding }) {
     email: '',
     whatsapp: '',
     country: 'India',
+    userRole: 'Working Professional',
+    interestReason: '',
+    consent: true,
     fee: 'FREE',
-    stuckArea: 'Manual addition via admin panel',
-    liveCommit: "Yes, I'll be there live",
-    goDeeper: "Yes, if it's right for me",
     status: 'Confirmed',
     notes: ''
   });
@@ -157,10 +157,10 @@ export default function AdminPanel({ onBackToLanding }) {
           email: '',
           whatsapp: '',
           country: 'India',
+          userRole: 'Working Professional',
+          interestReason: '',
+          consent: true,
           fee: 'FREE',
-          stuckArea: 'Manual addition via admin panel',
-          liveCommit: "Yes, I'll be there live",
-          goDeeper: "Yes, if it's right for me",
           status: 'Confirmed',
           notes: ''
         });
@@ -176,6 +176,8 @@ export default function AdminPanel({ onBackToLanding }) {
       (r.fullName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (r.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (r.whatsapp || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (r.userRole || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (r.interestReason || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (r.stuckArea || '').toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesCountry =
@@ -192,9 +194,8 @@ export default function AdminPanel({ onBackToLanding }) {
   const remainingSeats = Math.max(0, 20 - totalCount);
   const indiaCount = registrations.filter(r => r.country === 'India').length;
   const uaeCount = registrations.filter(r => r.country === 'UAE').length;
-  const usaCount = registrations.filter(r => r.country === 'USA').length;
-  const otherCount = registrations.filter(r => !['India', 'UAE', 'USA'].includes(r.country)).length;
-  const liveConfirmedCount = registrations.filter(r => r.liveCommit?.includes('live')).length;
+  const usaCount = registrations.filter(r => ['USA', 'United States'].includes(r.country)).length;
+  const otherCount = registrations.filter(r => !['India', 'UAE', 'USA', 'United States'].includes(r.country)).length;
 
   // If Not Authenticated, Show Secure Lock Screen
   if (!isAuthenticated) {
@@ -292,8 +293,8 @@ export default function AdminPanel({ onBackToLanding }) {
           <div className="admin-brand">
             <img src={logoImg} alt="Brahmamuhurta Logo" className="brand-logo-img" />
             <div>
-              <h1 className="admin-portal-title">Brahmamuhurta — Admin Portal</h1>
-              <p className="admin-portal-subtitle">Founding Batch · Registrations &amp; Live Cohort Manager</p>
+              <h1 className="admin-portal-title">The Narayan Presence — Admin Portal</h1>
+              <p className="admin-portal-subtitle">7 &amp; 8 Oct 2026 Cohort · Registration &amp; Attendee Manager</p>
             </div>
           </div>
 
@@ -315,7 +316,7 @@ export default function AdminPanel({ onBackToLanding }) {
             <button
               onClick={() => {
                 if (onBackToLanding) onBackToLanding();
-                else window.location.href = 'http://localhost:5173/';
+                else window.location.href = '/';
               }}
               className="btn btn-sm btn-landing-switch"
             >
@@ -339,7 +340,7 @@ export default function AdminPanel({ onBackToLanding }) {
             </div>
             <div className="metric-subtext">
               {remainingSeats > 0 ? (
-                <span className="text-warning">⚡ {remainingSeats} seats remaining for Batch 01</span>
+                <span className="text-warning">⚡ {remainingSeats} seats remaining for Oct 7-8 Batch</span>
               ) : (
                 <span className="text-success">🎉 Cohort capacity fully filled!</span>
               )}
@@ -354,17 +355,13 @@ export default function AdminPanel({ onBackToLanding }) {
               <span className="country-tag">🇺🇸 USA: <strong>{usaCount}</strong></span>
               {otherCount > 0 && <span className="country-tag">🌍 Other: <strong>{otherCount}</strong></span>}
             </div>
-            <div className="metric-subtext">Automatic timezone routing enabled</div>
+            <div className="metric-subtext">Automatic timezone routing (IST / Dubai / NY)</div>
           </div>
 
           <div className="metric-card">
-            <div className="metric-label">Live Attendance Readiness</div>
-            <div className="metric-value">{liveConfirmedCount} <span className="metric-sub-unit">Confirmed Live</span></div>
-            <div className="metric-subtext">
-              {totalCount > 0
-                ? `${Math.round((liveConfirmedCount / totalCount) * 100)}% committed to live sessions`
-                : 'Awaiting participants'}
-            </div>
+            <div className="metric-label">Live Batch Schedule</div>
+            <div className="metric-value" style={{ fontSize: '1.25rem' }}>Wed 7 &amp; Thu 8 Oct</div>
+            <div className="metric-subtext">8:30 PM IST • 7:00 PM Dubai • 11:00 AM NY</div>
           </div>
         </section>
 
@@ -375,7 +372,7 @@ export default function AdminPanel({ onBackToLanding }) {
             <input
               type="text"
               className="admin-search-input"
-              placeholder="Search by name, email, WhatsApp, or response..."
+              placeholder="Search by name, email, WhatsApp, role, or interest..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
             />
@@ -393,8 +390,12 @@ export default function AdminPanel({ onBackToLanding }) {
             >
               <option value="All">All Countries</option>
               <option value="India">🇮🇳 India</option>
-              <option value="UAE">🇦🇪 UAE</option>
+              <option value="United States">🇺🇸 United States</option>
               <option value="USA">🇺🇸 USA</option>
+              <option value="UAE">🇦🇪 UAE</option>
+              <option value="UK">🇬🇧 UK</option>
+              <option value="Canada">🇨🇦 Canada</option>
+              <option value="Australia">🇦🇺 Australia</option>
               <option value="Other">🌍 Other</option>
             </select>
           </div>
@@ -436,8 +437,8 @@ export default function AdminPanel({ onBackToLanding }) {
                   <tr>
                     <th>Participant</th>
                     <th>WhatsApp / Phone</th>
-                    <th>Country &amp; Fee</th>
-                    <th>What Feels Stuck</th>
+                    <th>Country &amp; Role</th>
+                    <th>Why Interested</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
@@ -446,7 +447,7 @@ export default function AdminPanel({ onBackToLanding }) {
                   {filteredRegistrations.map((reg) => {
                     const cleanPhone = (reg.whatsapp || '').replace(/[^0-9]/g, '');
                     const waLink = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
-                      `Namaste ${reg.fullName}, this is Ranu Patel from Narayan Presence. Welcome to the Founding Batch of The Narayan Method workshop!`
+                      `Namaste ${reg.fullName}, this is Ranu Patel from The Narayan Presence. Welcome to the "Wake Before The World — Reset Your Mind. Realign Your Life" live workshop on 7 & 8 October!`
                     )}`;
 
                     return (
@@ -486,16 +487,21 @@ export default function AdminPanel({ onBackToLanding }) {
                             <span className="country-badge">
                               {reg.country === 'India' && '🇮🇳'}
                               {reg.country === 'UAE' && '🇦🇪'}
-                              {reg.country === 'USA' && '🇺🇸'}
+                              {['USA', 'United States'].includes(reg.country) && '🇺🇸'}
+                              {reg.country === 'UK' && '🇬🇧'}
+                              {reg.country === 'Canada' && '🇨🇦'}
+                              {reg.country === 'Australia' && '🇦🇺'}
                               {reg.country === 'Other' && '🌍'} {reg.country}
                             </span>
-                            <span className="fee-amount">{reg.fee}</span>
+                            <span className="fee-amount" style={{ fontSize: '0.78rem', color: '#64748B' }}>
+                              {reg.userRole || 'Participant'}
+                            </span>
                           </div>
                         </td>
 
                         <td>
                           <div className="stuck-snippet" onClick={() => setSelectedRegistrant(reg)}>
-                            <p className="stuck-text-preview">{reg.stuckArea || 'No details provided'}</p>
+                            <p className="stuck-text-preview">{reg.interestReason || reg.stuckArea || 'Personal Growth'}</p>
                             <span className="view-more-link">View details &rarr;</span>
                           </div>
                         </td>
@@ -563,18 +569,18 @@ export default function AdminPanel({ onBackToLanding }) {
 
               <div className="modal-grid-info">
                 <div className="modal-info-item">
-                  <label>Country &amp; Cohort:</label>
-                  <span>{selectedRegistrant.country} ({selectedRegistrant.fee})</span>
+                  <label>Country &amp; Access:</label>
+                  <span>{selectedRegistrant.country} (100% Free)</span>
                 </div>
 
                 <div className="modal-info-item">
-                  <label>Live Commitment:</label>
-                  <span>{selectedRegistrant.liveCommit}</span>
+                  <label>Background / Role:</label>
+                  <span>{selectedRegistrant.userRole || 'Not specified'}</span>
                 </div>
 
                 <div className="modal-info-item">
-                  <label>Open To Going Deeper:</label>
-                  <span>{selectedRegistrant.goDeeper}</span>
+                  <label>Consent Given:</label>
+                  <span>{selectedRegistrant.consent !== false ? '✅ Yes (Email/WhatsApp)' : '❌ No'}</span>
                 </div>
 
                 <div className="modal-info-item">
@@ -593,9 +599,9 @@ export default function AdminPanel({ onBackToLanding }) {
               </div>
 
               <div className="modal-section-box">
-                <label className="modal-label-bold">What Feels Most "Stuck" For Them:</label>
+                <label className="modal-label-bold">What Made Them Interested In Joining:</label>
                 <div className="stuck-full-content">
-                  "{selectedRegistrant.stuckArea || 'None'}"
+                  "{selectedRegistrant.interestReason || selectedRegistrant.stuckArea || 'General personal growth and self-awareness.'}"
                 </div>
               </div>
 
@@ -613,7 +619,7 @@ export default function AdminPanel({ onBackToLanding }) {
               <div className="modal-actions-footer">
                 <a
                   href={`https://wa.me/${(selectedRegistrant.whatsapp || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                    `Namaste ${selectedRegistrant.fullName}, this is Ranu Patel from Narayan Presence. Looking forward to having you live this weekend!`
+                    `Namaste ${selectedRegistrant.fullName}, this is Ranu Patel from The Narayan Presence. Looking forward to seeing you live on 7 & 8 October!`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -683,20 +689,44 @@ export default function AdminPanel({ onBackToLanding }) {
                     setNewReg({ ...newReg, country, fee: 'FREE' });
                   }}
                 >
-                  <option value="India">India (FREE)</option>
-                  <option value="UAE">UAE (FREE)</option>
-                  <option value="USA">USA (FREE)</option>
-                  <option value="Other">Other (FREE)</option>
+                  <option value="India">India</option>
+                  <option value="United States">United States</option>
+                  <option value="UAE">UAE</option>
+                  <option value="UK">UK</option>
+                  <option value="Canada">Canada</option>
+                  <option value="Australia">Australia</option>
+                  <option value="Other">Other</option>
                 </select>
               </div>
 
               <div className="form-group">
-                <label className="form-label">What Feels Stuck</label>
+                <label className="form-label">Role / Description</label>
+                <select
+                  className="admin-select"
+                  value={newReg.userRole}
+                  onChange={e => setNewReg({ ...newReg, userRole: e.target.value })}
+                >
+                  <option value="Working Professional">Working Professional</option>
+                  <option value="Entrepreneur / Business Owner">Entrepreneur / Business Owner</option>
+                  <option value="Founder-CEO">Founder-CEO</option>
+                  <option value="Student / Seeker">Student / Seeker</option>
+                  <option value="Parent">Parent</option>
+                  <option value="Homemaker">Homemaker</option>
+                  <option value="Service Provider">Service Provider</option>
+                  <option value="Coach-Consultant">Coach-Consultant</option>
+                  <option value="Retired-Older Adult">Retired-Older Adult</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Why Interested in Workshop</label>
                 <textarea
                   className="form-input form-textarea"
                   rows={2}
-                  value={newReg.stuckArea}
-                  onChange={e => setNewReg({ ...newReg, stuckArea: e.target.value })}
+                  placeholder="e.g. Personal growth, clarity, stress reduction..."
+                  value={newReg.interestReason}
+                  onChange={e => setNewReg({ ...newReg, interestReason: e.target.value })}
                 />
               </div>
 
