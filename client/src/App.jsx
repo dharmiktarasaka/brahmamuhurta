@@ -160,9 +160,9 @@ export default function App() {
 
   // Google Calendar Event Link
   const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-    'Brahma Muhurta Awakening — Reset Your Mind. Realign Your Life (Day 1 & 2)'
-  )}&dates=20261007T150000Z/20261007T160000Z&details=${encodeURIComponent(
-    'The Narayan Presence 2-Day Live Workshop with Ranu Patel.\n\nSession 1: Wednesday, 7 October 2026 • 8:30 PM IST\nSession 2: Thursday, 8 October 2026 • 8:30 PM IST\n\nDubai: 7:00 PM • New York: 11:00 AM EDT\nZoom links sent via WhatsApp.'
+    'Brahma Muhurta Awakening — Reset Your Mind. Realign Your Life (Every Wed & Thu)'
+  )}&details=${encodeURIComponent(
+    'The Narayan Presence 2-Day Live Workshop with Ranu Patel.\n\nSession 1: Every Wednesday • 8:30 PM IST\nSession 2: Every Thursday • 8:30 PM IST\n\nDubai: 7:00 PM • New York: 11:00 AM EDT\nZoom links sent via WhatsApp.'
   )}&location=${encodeURIComponent('Live Online Zoom')}`;
 
   // Download .ics file
@@ -174,18 +174,14 @@ export default function App() {
       'CALSCALE:GREGORIAN',
       'METHOD:PUBLISH',
       'BEGIN:VEVENT',
-      'SUMMARY:Brahma Muhurta Awakening (Session 1)',
-      'DESCRIPTION:Day 1 of 2-Day Live Workshop with Ranu Patel. Live on Zoom.',
-      'DTSTART:20261007T150000Z',
-      'DTEND:20261007T160000Z',
+      'SUMMARY:Brahma Muhurta Awakening (Session 1 - Wednesday)',
+      'DESCRIPTION:Session 1 of 2-Day Live Workshop with Ranu Patel. Every Wednesday 8:30 PM IST on Zoom.',
       'LOCATION:Live Online on Zoom',
       'STATUS:CONFIRMED',
       'END:VEVENT',
       'BEGIN:VEVENT',
-      'SUMMARY:Brahma Muhurta Awakening (Session 2)',
-      'DESCRIPTION:Day 2 of 2-Day Live Workshop with Ranu Patel. Live on Zoom.',
-      'DTSTART:20261008T150000Z',
-      'DTEND:20261008T160000Z',
+      'SUMMARY:Brahma Muhurta Awakening (Session 2 - Thursday)',
+      'DESCRIPTION:Session 2 of 2-Day Live Workshop with Ranu Patel. Every Thursday 8:30 PM IST on Zoom.',
       'LOCATION:Live Online on Zoom',
       'STATUS:CONFIRMED',
       'END:VEVENT',
@@ -195,7 +191,7 @@ export default function App() {
     const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
-    link.setAttribute('download', 'narayan_workshop_oct7_8.ics');
+    link.setAttribute('download', 'narayan_brahmamuhurta_workshop.ics');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -271,17 +267,17 @@ export default function App() {
                 <span className="free-pill-badge">100% FREE ACCESS</span>
               </div>
 
-              {/* 2-Day Side-by-Side Dates */}
+              {/* 2-Day Side-by-Side Schedule */}
               <div className="showcase-dates-grid">
                 {/* Session 1 */}
                 <div className="session-box">
                   <div className="date-stamp">
                     <span className="stamp-day">DAY 1</span>
-                    <span className="stamp-num">07</span>
-                    <span className="stamp-month">OCT 2026</span>
+                    <span className="stamp-num">WED</span>
+                    <span className="stamp-month">EVERY</span>
                   </div>
                   <div className="session-meta">
-                    <span className="session-day-name">Wednesday</span>
+                    <span className="session-day-name">Every Wednesday</span>
                     <div className="session-clock-time">8:30 PM <small>IST</small></div>
                     <span className="session-tag-sm">Awareness &amp; Reset</span>
                   </div>
@@ -293,11 +289,11 @@ export default function App() {
                 <div className="session-box">
                   <div className="date-stamp accent">
                     <span className="stamp-day">DAY 2</span>
-                    <span className="stamp-num">08</span>
-                    <span className="stamp-month">OCT 2026</span>
+                    <span className="stamp-num">THU</span>
+                    <span className="stamp-month">EVERY</span>
                   </div>
                   <div className="session-meta">
-                    <span className="session-day-name">Thursday</span>
+                    <span className="session-day-name">Every Thursday</span>
                     <div className="session-clock-time">8:30 PM <small>IST</small></div>
                     <span className="session-tag-sm">Practice &amp; Realign</span>
                   </div>
@@ -830,7 +826,7 @@ export default function App() {
           <div className="schedule-table-card-artemis">
             <div className="section-header-artemis text-center" style={{ marginBottom: '24px' }}>
               <h3 className="section-heading-artemis" style={{ fontSize: '2rem' }}>
-                Workshop <em>Dates &amp; Time Zones</em>
+                Workshop <em>Schedule &amp; Time Zones</em>
               </h3>
               <p className="section-subtext-artemis" style={{ fontSize: '0.95rem' }}>
                 Day 1 creates awareness and the core framework. Day 2 focuses on practice, reflection, implementation and live Q&amp;A.
@@ -842,34 +838,34 @@ export default function App() {
                 <thead>
                   <tr>
                     <th>Audience / Region</th>
-                    <th>Session 1 (Day 1)</th>
-                    <th>Session 2 (Day 2)</th>
+                    <th>Session 1 (Every Wednesday)</th>
+                    <th>Session 2 (Every Thursday)</th>
                     <th>Schedule Notes</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>🇮🇳 <strong>India (IST)</strong></td>
-                    <td>7 Oct • 8:30 PM IST</td>
-                    <td>8 Oct • 8:30 PM IST</td>
+                    <td>Every Wednesday • 8:30 PM IST</td>
+                    <td>Every Thursday • 8:30 PM IST</td>
                     <td>Primary evening session (60 mins)</td>
                   </tr>
                   <tr>
                     <td>🇦🇪 <strong>Dubai / UAE (GST)</strong></td>
-                    <td>7 Oct • 7:00 PM</td>
-                    <td>8 Oct • 7:00 PM</td>
+                    <td>Every Wednesday • 7:00 PM</td>
+                    <td>Every Thursday • 7:00 PM</td>
                     <td>Convenient evening live window</td>
                   </tr>
                   <tr>
                     <td>🇺🇸 <strong>New York (EDT)</strong></td>
-                    <td>7 Oct • 11:00 AM</td>
-                    <td>8 Oct • 11:00 AM</td>
+                    <td>Every Wednesday • 11:00 AM</td>
+                    <td>Every Thursday • 11:00 AM</td>
                     <td>U.S. daytime option*</td>
                   </tr>
                   <tr>
                     <td>🇺🇸 <strong>Los Angeles (PDT)</strong></td>
-                    <td>7 Oct • 8:00 AM</td>
-                    <td>8 Oct • 8:00 AM</td>
+                    <td>Every Wednesday • 8:00 AM</td>
+                    <td>Every Thursday • 8:00 AM</td>
                     <td>Early morning West Coast</td>
                   </tr>
                 </tbody>
@@ -1219,9 +1215,9 @@ export default function App() {
             </div>
 
             <div>
-              <span className="section-tag-mono" style={{ background: '#FFFFFF' }}>[ FOUNDING BATCH ]</span>
+              <span className="section-tag-mono" style={{ background: '#FFFFFF' }}>[ LIVE COHORT ]</span>
               <p className="footer-schedule-reminder" style={{ marginTop: '8px' }}>
-                <strong>Dates:</strong> 7 &amp; 8 October 2026 • 8:30 PM IST (Dubai 7 PM • NY 11 AM*)<br />
+                <strong>Schedule:</strong> Every Wednesday &amp; Thursday • 8:30 PM IST (Dubai 7 PM • NY 11 AM*)<br />
                 The Narayan Presence • Awaken • Align • Transform
               </p>
             </div>

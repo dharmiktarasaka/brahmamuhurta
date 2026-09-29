@@ -537,7 +537,7 @@ a {
   border: 1px solid var(--border-card);
   border-radius: var(--radius-xs);
   padding: 3px 6px;
-  min-width: 44px;
+  min-width: 48px;
   text-align: center;
   flex-shrink: 0;
 }
@@ -556,12 +556,13 @@ a {
 }
 
 .date-stamp .stamp-num {
-  font-size: 1.15rem;
+  font-size: 0.95rem;
   font-weight: 900;
   color: var(--text-primary);
-  line-height: 1.05;
+  line-height: 1.1;
   margin: 1px 0;
   font-family: var(--font-sans);
+  letter-spacing: 0.03em;
 }
 
 .date-stamp .stamp-month {

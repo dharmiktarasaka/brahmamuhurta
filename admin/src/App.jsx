@@ -447,7 +447,7 @@ export default function AdminPanel({ onBackToLanding }) {
                   {filteredRegistrations.map((reg) => {
                     const cleanPhone = (reg.whatsapp || '').replace(/[^0-9]/g, '');
                     const waLink = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
-                      `Namaste ${reg.fullName}, this is Ranu Patel from The Narayan Presence. Welcome to the "Wake Before The World — Reset Your Mind. Realign Your Life" live workshop on 7 & 8 October!`
+                      `Namaste ${reg.fullName}, this is Ranu Patel from The Narayan Presence. Welcome to the "Wake Before The World — Reset Your Mind. Realign Your Life" live workshop (Every Wednesday & Thursday)!`
                     )}`;
 
                     return (
@@ -619,7 +619,7 @@ export default function AdminPanel({ onBackToLanding }) {
               <div className="modal-actions-footer">
                 <a
                   href={`https://wa.me/${(selectedRegistrant.whatsapp || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                    `Namaste ${selectedRegistrant.fullName}, this is Ranu Patel from The Narayan Presence. Looking forward to seeing you live on 7 & 8 October!`
+                    `Namaste ${selectedRegistrant.fullName}, this is Ranu Patel from The Narayan Presence. Looking forward to seeing you live on Wednesday & Thursday!`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
